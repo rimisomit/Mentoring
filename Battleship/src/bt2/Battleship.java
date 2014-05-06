@@ -115,7 +115,7 @@ public class Battleship {
                             myBoard.display(false);
 						} else if (type.equals(cmd_mySHIPS)) {
                             System.out.println("\t\t My Ships");
-                            myBoard.display(false);
+                            myBoard.display(true);
                         } else {
 							System.out.println(error_INVALID_VIEW_COMMAND);
 						}
