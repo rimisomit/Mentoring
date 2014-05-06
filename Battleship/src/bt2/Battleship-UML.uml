@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>bt2</OriginalElement>
+  <nodes>
+    <node x="973.5833333333337" y="437.9999999999999">bt2.Ship</node>
+    <node x="238.6613636363636" y="540.0">bt2.Board</node>
+    <node x="986.0833333333335" y="829.1666666666667">bt2.Ship.ShipType</node>
+    <node x="400.8030303030303" y="-3.3333333333333144">bt2.Cell</node>
+    <node x="-497.4166666666664" y="67.83333333333343">bt2.BattleshipException</node>
+    <node x="89.58333333333354" y="308.6666666666667">bt2.Crater</node>
+    <node x="576.9166666666667" y="335.3333333333333">bt2.Water</node>
+    <node x="-798.4999999999997" y="476.0000000000002">bt2.Battleship</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="bt2.Board" target="bt2.Crater">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="bt2.Battleship" target="bt2.BattleshipException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="bt2.Ship.ShipType" target="bt2.Ship">
+      <point x="0.0" y="-130.5" />
+      <point x="104.66666666666674" y="131.0" />
+    </edge>
+    <edge source="bt2.Battleship" target="bt2.Board">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="bt2.Board" target="bt2.Ship">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="bt2.Board" target="bt2.Cell">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="bt2.Water" target="bt2.Cell">
+      <point x="0.0" y="-57.0" />
+      <point x="639.4166666666667" y="266.3333333333333" />
+      <point x="588.4030303030304" y="208.0" />
+      <point x="53.60000000000002" y="89.0" />
+    </edge>
+    <edge source="bt2.Board" target="bt2.Water">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="bt2.Crater" target="bt2.Cell">
+      <point x="-5.6843418860808015E-14" y="-57.0" />
+      <point x="388.08333333333337" y="226.33333333333337" />
+      <point x="427.6030303030303" y="208.0" />
+      <point x="-107.19999999999999" y="89.0" />
+    </edge>
+    <edge source="bt2.Ship" target="bt2.Cell">
+      <point x="0.0" y="-131.0" />
+      <point x="902.25" y="321.3333333333333" />
+      <point x="642.0030303030303" y="198.0" />
+      <point x="107.20000000000005" y="89.0" />
+    </edge>
+    <edge source="bt2.Board" target="bt2.BattleshipException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6000000000000001" x="847.9999999999999" y="799.1666666666665" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
