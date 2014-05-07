@@ -4,11 +4,15 @@ import java.util.*;
 
 /**
  * Main class
- * Main loop, Checking input commands
- * javac -d bin bt2/Battleship.java
- * cd bin
- * java bt2.Battleship
  */
+// TODO compile and run
+// Main loop, Checking input commands
+// javac -d bin bt2/Battleship.java
+// cd bin
+// java bt2.Battleship
+// TODO create jar
+// java -jar <filename>.jar
+// TODO put config file inside classpath
 
 public class Battleship {
 	// Predefined error messages
@@ -43,10 +47,11 @@ public class Battleship {
 	private final static String cmd_HELP = "help";
 	private final static String cmd_QUIT = "quit";
     private final static String cmd_EXIT = "exit";
-	private Board board;
-    private Board myBoard;
+	private Board board, myBoard;
+    //private Board myBoard;
     // > - as a prompt
-	private final String PROMPT = "user$ > ";
+	private final String userPrompt = "[Battleship]user$ > ";
+    private final String compPrompt = "[Battleship]comp$ > ";
 
     //constructor. Create game with two boards
 	public Battleship(int dim, String configFile) throws BattleshipException {
@@ -60,11 +65,15 @@ public class Battleship {
     // >help output
 	private void printHelpMsg() {
 		System.out.println("List of commands:");
-		System.out.println(" view|show my|comp board - displays the boards");
-		System.out.println(" view|show my|comp ships - displays the placement of the ships");
-		System.out.println(" fire 0 2 - fires a missile at the cell at [0,2]");
-		System.out.println(" mystats|compstats - prints out the game statistics");
-		System.out.println(" quit/exit - exits the game");
+        System.out.println();
+        System.out.println(" view|show myboard|compboard - displays the boards");
+		System.out.println(" view|show myships|compships - displays the placement of the ships");
+        System.out.println();
+        System.out.println(" fire 0 2 - fires a missile at the cell at [0,2]");
+        System.out.println();
+        System.out.println(" mystats|compstats - prints out the game statistics");
+        System.out.println();
+        System.out.println(" quit/exit - exits the game");
 	}
 
     // >stats show statistic
@@ -83,15 +92,16 @@ public class Battleship {
 
 	private void mainLoop() {
 		// display my board with ships
-        System.out.println("\t\t\tMy board");
+        System.out.println("\t\tMy board");
         myBoard.display(true);
-		// wait for user input
+        System.out.println("Hint: type help");
+        // wait for user input
 		Scanner lineScanner = new Scanner(System.in);
 		String cmd;
 
 		do {
 			cmd = cmd_BLANK;
-			System.out.print(PROMPT);
+			System.out.print(userPrompt);
 			Scanner wordScanner = new Scanner(lineScanner.nextLine());
 			if (wordScanner.hasNext()) {
 				cmd = wordScanner.next();
@@ -157,11 +167,16 @@ public class Battleship {
 							}
                             System.out.println("\t\t Opponent's board");
 							board.display(false);
+                            try {
+                                Thread.sleep(3000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                         //comp fire
                         row = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
                         col = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
-                        System.out.println("comp$ > fire " + row + " " + col);
+                        System.out.println(compPrompt + " fire " + row + " " + col);
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
@@ -177,6 +192,7 @@ public class Battleship {
                                 }
                             System.out.println("\t\t My board");
                             myBoard.display(false);
+                            System.out.println(" -----------Round End--------------");
 						} else {
 							System.out.println(error_SAME_COORDINATES);
 						}
