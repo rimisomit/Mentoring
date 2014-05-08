@@ -1,4 +1,4 @@
-package bt2;
+package com.mentoring.bt;
 /**
  * Crater subclass, on Board cell hit.
  * nonCheatMode [X|O]

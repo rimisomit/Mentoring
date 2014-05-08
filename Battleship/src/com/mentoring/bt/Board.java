@@ -1,4 +1,4 @@
-package bt2;
+package com.mentoring.bt;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.NoSuchElementException;

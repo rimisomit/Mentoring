@@ -1,4 +1,4 @@
-package bt2;
+package com.mentoring.bt;
 /**
  * Abstract Supper class, extension for Ship, Crater and Water
  */

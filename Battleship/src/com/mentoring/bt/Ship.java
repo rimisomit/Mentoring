@@ -1,4 +1,4 @@
-package bt2;
+package com.mentoring.bt;
 
 /**
  * Ship subclass

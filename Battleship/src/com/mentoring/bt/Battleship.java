@@ -1,16 +1,20 @@
-package bt2;
+package com.mentoring.bt;
 import java.io.IOException;
 import java.util.*;
 
 /**
  * Main class
+ * Main loop, Checking input commands
  */
 // TODO compile and run
-// Main loop, Checking input commands
-// javac -d bin bt2/Battleship.java
-// cd bin
-// java bt2.Battleship
+// javac -d classes -cp src src/com/bt/Battleship.java
+// --run with classpath
+// java -cp classes com.mentoring.bt.Battleship 10
 // TODO create jar
+// jar cvf bin/btjar.jar src/META-INF/MANIFEST.MF classes/
+// execute
+// java -cp bin:bin/btjar.jar com.mentoring.bt.Battleship
+//    or
 // java -jar <filename>.jar
 // TODO put config file inside classpath
 
@@ -48,10 +52,8 @@ public class Battleship {
 	private final static String cmd_QUIT = "quit";
     private final static String cmd_EXIT = "exit";
 	private Board board, myBoard;
-    //private Board myBoard;
-    // > - as a prompt
-	private final String userPrompt = "[Battleship]user$ > ";
-    private final String compPrompt = "[Battleship]comp$ > ";
+	private final String userPrompt = "[Battleship] user$ > ";
+    private final String compPrompt = "[Battleship] comp$ > ";
 
     //constructor. Create game with two boards
 	public Battleship(int dim, String configFile) throws BattleshipException {
@@ -229,6 +231,7 @@ public class Battleship {
 	}
 
     public static void clearConsole() {
+
         try {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) {
@@ -259,6 +262,15 @@ public class Battleship {
 			Battleship bs;
 			String configFile = args.length == 1 ? null : args[1];
 			bs = new Battleship(dim, configFile);
+
+            // TODO bs.getClass().getClassLoader().getResourceAsStream();
+            // TODO create jar by console
+
+            // TODO install maven
+            // TODO create test maven project by arh types, ensure build SU
+            // TODO put BT into maven
+            // TODO Apache POI library to save progress
+
 			// enter main loop
 			bs.mainLoop();
 		}

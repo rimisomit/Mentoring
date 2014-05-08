@@ -1,5 +1,6 @@
 package com.few;
 /**
+ * cd src
  * javac -d bin com/few/Class1.java
  * cd bin
  * java com.few.Class1
