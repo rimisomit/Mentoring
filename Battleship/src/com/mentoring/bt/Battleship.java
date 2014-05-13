@@ -1,5 +1,8 @@
 package com.mentoring.bt;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -17,6 +20,8 @@ import java.util.*;
 //    or
 // java -jar <filename>.jar
 // TODO put config file inside classpath
+// bs.getClass().getClassLoader().getResourceAsStream();
+// Done
 
 public class Battleship {
 	// Predefined error messages
@@ -52,8 +57,8 @@ public class Battleship {
 	private final static String cmd_QUIT = "quit";
     private final static String cmd_EXIT = "exit";
 	private Board board, myBoard;
-	private final String userPrompt = "[Battleship] user$ > ";
-    private final String compPrompt = "[Battleship] comp$ > ";
+	private final static String userPrompt = "[Battleship] user$ > ";
+    private final static String compPrompt = "[Battleship] comp$ > ";
 
     //constructor. Create game with two boards
 	public Battleship(int dim, String configFile) throws BattleshipException {
@@ -230,8 +235,7 @@ public class Battleship {
 		} while (!(cmd.equals(cmd_QUIT)|cmd.equals(cmd_EXIT)));
 	}
 
-    public static void clearConsole() {
-
+    public void clearConsole() {
         try {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) {
@@ -246,12 +250,31 @@ public class Battleship {
 
 	public static void main(String[] args) {
 		try {
-			// Check arguments. >java Battleship N [config-file]
+            /*
+            Scanner userChoiceLine = new Scanner(System.in);
+            Scanner userChoiceWord = new Scanner(userChoiceLine.nextLine());
+            if (userChoiceWord.next().equals("yes")) {
+                System.out.println("using file");
+                String configFile = "/home/user/Dropbox/git/Mentoring/Battleship/src/bt2/ships.conf";
+            }
+            System.out.println("Load ships from file? yes/no");
+            System.out.print(userPrompt);
+            userChoiceLine = new Scanner(System.in);
+            userChoiceWord = new Scanner(userChoiceLine.nextLine());
+            if (Integer.parseInt(userChoiceWord.next()) > 9 | Integer.parseInt(userChoiceWord.next()) < 100 ) {
+                System.out.println();
+            }
+
+            // Check arguments. >java Battleship N [config-file]
 			if (args.length < 1 || args.length > 2) {
 				throw new BattleshipException(error_ILLEGAL_NUM_ARGS);
 			}
+			*/
+            //String userPrams[] = new String[2];
+            //userPrams = getUserSetup();
 			// Read input params
-			int dim = Integer.parseInt(args[0]);
+            System.out.println("Choose board size 10 .. 100");
+            int dim = Integer.parseInt(getUserResponce(1));
             // check min..max size
 			if (dim < Board.MIN_BOARD_SIZE) {
 				throw new BattleshipException(error_BOARD_TOO_SMALL);
@@ -259,18 +282,15 @@ public class Battleship {
 				throw new BattleshipException(error_BOARD_TOO_LARGE);
 			}
 		    // create Battleship instance
+            System.out.println("Load ships from file? yes/no");
+            String configFile = null;
+            if (getUserResponce(0).equals("loadfromfile")) {
+                System.out.println("Enter file name in config directory");
+                configFile = getUserResponce(-1);
+            }
+            //System.out.println(getUserResponce(0));
 			Battleship bs;
-			String configFile = args.length == 1 ? null : args[1];
 			bs = new Battleship(dim, configFile);
-
-            // TODO bs.getClass().getClassLoader().getResourceAsStream();
-            // TODO create jar by console
-
-            // TODO install maven
-            // TODO create test maven project by arh types, ensure build SU
-            // TODO put BT into maven
-            // TODO Apache POI library to save progress
-
 			// enter main loop
 			bs.mainLoop();
 		}
@@ -281,4 +301,31 @@ public class Battleship {
 			System.err.println(error_ILLEGAL_NUM_ARGS);
 		} 
 	}
+    public static String getUserResponce(int question) {
+        System.out.print(userPrompt);
+        Scanner userChoiceLine = new Scanner(System.in);
+        Scanner userChoiceWord = new Scanner(userChoiceLine.nextLine());
+        String userChoiceWordS = userChoiceWord.next();
+        if (question == 1) {
+            if (Integer.parseInt(userChoiceWordS) > 9 | Integer.parseInt(userChoiceWordS) < 100 ) {
+                return userChoiceWordS;
+            }
+        }
+        if (question == 0) {
+            if (userChoiceWordS.equals("yes")) {
+                return "loadfromfile";
+            }
+        }
+        if (question == -1) {
+            URL fileURL = Battleship.class.getClassLoader().getResource(userChoiceWordS);
+            if (fileURL == null) {
+                System.out.println("No file found, loading random");
+                return null;
+            }
+            String configFile = fileURL.getPath();
+            System.out.println("Using file " + configFile);
+            return configFile;
+        }
+    return null;
+    }
 }
