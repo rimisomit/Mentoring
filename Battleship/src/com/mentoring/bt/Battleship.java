@@ -340,6 +340,6 @@ public class Battleship {
         System.out.println("Saved");
     }
     public void loadGame() {
-
+        System.out.println("Loaded");
     }
 }
