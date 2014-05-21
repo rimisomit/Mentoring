@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import org.apache.poi.*;
 
 /**
  * Main class
@@ -56,6 +57,7 @@ public class Battleship {
 	private final static String cmd_HELP = "help";
 	private final static String cmd_QUIT = "quit";
     private final static String cmd_EXIT = "exit";
+    private final static String cmd_SAVE = "save";
 	private Board board, myBoard;
 	private final static String userPrompt = "[Battleship] user$ > ";
     private final static String compPrompt = "[Battleship] comp$ > ";
@@ -223,6 +225,12 @@ public class Battleship {
 					} else {
 						printHelpMsg();
 					}
+                } else if (cmd.equals(cmd_SAVE)) {
+                    if (wordScanner.hasNext()) {
+                        System.out.println(error_WRONG_ARGUMENTS);
+                    } else {
+                        printHelpMsg();
+                    }
 				} else if (cmd.equals(cmd_QUIT) | cmd.equals(cmd_EXIT)) {
 					if (wordScanner.hasNext()) {
 						System.out.println(error_WRONG_ARGUMENTS);
@@ -327,5 +335,11 @@ public class Battleship {
             return configFile;
         }
     return null;
+    }
+    public void saveGame() {
+
+    }
+    public void loadGame() {
+
     }
 }
