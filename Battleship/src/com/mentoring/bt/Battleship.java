@@ -229,7 +229,7 @@ public class Battleship {
                     if (wordScanner.hasNext()) {
                         System.out.println(error_WRONG_ARGUMENTS);
                     } else {
-                        printHelpMsg();
+                        saveGame();
                     }
 				} else if (cmd.equals(cmd_QUIT) | cmd.equals(cmd_EXIT)) {
 					if (wordScanner.hasNext()) {
@@ -337,7 +337,7 @@ public class Battleship {
     return null;
     }
     public void saveGame() {
-
+        System.out.println("Saved");
     }
     public void loadGame() {
 
