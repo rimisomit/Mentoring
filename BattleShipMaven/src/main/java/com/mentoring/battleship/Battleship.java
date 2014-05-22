@@ -1,14 +1,32 @@
 package com.mentoring.battleship;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.*;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import java.text.SimpleDateFormat;
 
 /**
  * Main class
  * Main loop, Checking input commands
- * javac -d bin bt2/Battleship.java
- * cd bin
- * java bt2.Battleship
  */
+// TODO compile and run
+// javac -d classes -cp src src/com/bt/Battleship.java
+// --run with classpath
+// java -cp classes com.mentoring.bt.Battleship 10
+// TODO create jar
+// jar cvf bin/btjar.jar src/META-INF/MANIFEST.MF classes/
+// TODO execute
+// java -cp bin:bin/btjar.jar com.mentoring.bt.Battleship
+//    or
+// java -jar <filename>.jar
+//    or
+// java -cp config:target/BattleShip-1.0-SNAPSHOT.jar com.mentoring.battleship.Battleship
+// TODO put config file inside classpath
+// bs.getClass().getClassLoader().getResourceAsStream();
+// Done
 
 public class Battleship {
 	// Predefined error messages
@@ -43,10 +61,12 @@ public class Battleship {
 	private final static String cmd_HELP = "help";
 	private final static String cmd_QUIT = "quit";
     private final static String cmd_EXIT = "exit";
-	private Board board;
-    private Board myBoard;
-    // > - as a prompt
-	private final String PROMPT = "user$ > ";
+    private final static String cmd_SAVE = "save";
+	private Board board, myBoard;
+	private final static String userPrompt = "[Battleship] user$ > ";
+    private final static String compPrompt = "[Battleship] comp$ > ";
+    private static int arrayDimension;
+    String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
 
     //constructor. Create game with two boards
 	public Battleship(int dim, String configFile) throws BattleshipException {
@@ -60,11 +80,15 @@ public class Battleship {
     // >help output
 	private void printHelpMsg() {
 		System.out.println("List of commands:");
-		System.out.println(" view|show my|comp board - displays the boards");
-		System.out.println(" view|show my|comp ships - displays the placement of the ships");
-		System.out.println(" fire 0 2 - fires a missile at the cell at [0,2]");
-		System.out.println(" mystats|compstats - prints out the game statistics");
-		System.out.println(" quit/exit - exits the game");
+        System.out.println();
+        System.out.println(" view|show myboard|compboard - displays the boards");
+		System.out.println(" view|show myships|compships - displays the placement of the ships");
+        System.out.println();
+        System.out.println(" fire 0 2 - fires a missile at the cell at [0,2]");
+        System.out.println();
+        System.out.println(" mystats|compstats - prints out the game statistics");
+        System.out.println();
+        System.out.println(" quit/exit - exits the game");
 	}
 
     // >stats show statistic
@@ -83,15 +107,16 @@ public class Battleship {
 
 	private void mainLoop() {
 		// display my board with ships
-        System.out.println("\t\t\tMy board");
+        System.out.println("\t\tMy board");
         myBoard.display(true);
-		// wait for user input
+        System.out.println("Hint: type help");
+        // wait for user input
 		Scanner lineScanner = new Scanner(System.in);
 		String cmd;
 
 		do {
 			cmd = cmd_BLANK;
-			System.out.print(PROMPT);
+			System.out.print(userPrompt);
 			Scanner wordScanner = new Scanner(lineScanner.nextLine());
 			if (wordScanner.hasNext()) {
 				cmd = wordScanner.next();
@@ -115,7 +140,7 @@ public class Battleship {
                             myBoard.display(false);
 						} else if (type.equals(cmd_mySHIPS)) {
                             System.out.println("\t\t My Ships");
-                            myBoard.display(false);
+                            myBoard.display(true);
                         } else {
 							System.out.println(error_INVALID_VIEW_COMMAND);
 						}
@@ -157,11 +182,16 @@ public class Battleship {
 							}
                             System.out.println("\t\t Opponent's board");
 							board.display(false);
+                            try {
+                                Thread.sleep(3000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                         //comp fire
                         row = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
                         col = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
-                        System.out.println("comp$ > fire " + row + " " + col);
+                        System.out.println(compPrompt + " fire " + row + " " + col);
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
@@ -177,6 +207,7 @@ public class Battleship {
                                 }
                             System.out.println("\t\t My board");
                             myBoard.display(false);
+                            System.out.println(" -----------Round End--------------");
 						} else {
 							System.out.println(error_SAME_COORDINATES);
 						}
@@ -200,6 +231,14 @@ public class Battleship {
 					} else {
 						printHelpMsg();
 					}
+                    // =====Save to xls=====
+                } else if (cmd.equals(cmd_SAVE)) {
+                    if (wordScanner.hasNext()) {
+                        System.out.println(error_WRONG_ARGUMENTS);
+                    } else {
+                        board.saveGame();
+                        myBoard.saveGame();
+                    }
 				} else if (cmd.equals(cmd_QUIT) | cmd.equals(cmd_EXIT)) {
 					if (wordScanner.hasNext()) {
 						System.out.println(error_WRONG_ARGUMENTS);
@@ -212,7 +251,7 @@ public class Battleship {
 		} while (!(cmd.equals(cmd_QUIT)|cmd.equals(cmd_EXIT)));
 	}
 
-    public static void clearConsole() {
+    public void clearConsole() {
         try {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) {
@@ -227,22 +266,47 @@ public class Battleship {
 
 	public static void main(String[] args) {
 		try {
-			// Check arguments. >java Battleship N [config-file]
+            /*
+            Scanner userChoiceLine = new Scanner(System.in);
+            Scanner userChoiceWord = new Scanner(userChoiceLine.nextLine());
+            if (userChoiceWord.next().equals("yes")) {
+                System.out.println("using file");
+                String configFile = "/home/user/Dropbox/git/Mentoring/Battleship/src/bt2/ships.conf";
+            }
+            System.out.println("Load ships from file? yes/no");
+            System.out.print(userPrompt);
+            userChoiceLine = new Scanner(System.in);
+            userChoiceWord = new Scanner(userChoiceLine.nextLine());
+            if (Integer.parseInt(userChoiceWord.next()) > 9 | Integer.parseInt(userChoiceWord.next()) < 100 ) {
+                System.out.println();
+            }
+
+            // Check arguments. >java Battleship N [config-file]
 			if (args.length < 1 || args.length > 2) {
 				throw new BattleshipException(error_ILLEGAL_NUM_ARGS);
 			}
+			*/
+            //String userPrams[] = new String[2];
+            //userPrams = getUserSetup();
 			// Read input params
-			int dim = Integer.parseInt(args[0]);
+            System.out.println("Choose board size 10 .. 100");
+            arrayDimension = Integer.parseInt(getUserResponce(1));
             // check min..max size
-			if (dim < Board.MIN_BOARD_SIZE) {
+			if (arrayDimension < Board.MIN_BOARD_SIZE) {
 				throw new BattleshipException(error_BOARD_TOO_SMALL);
-			} else if (dim > Board.MAX_BOARD_SIZE) {
+			} else if (arrayDimension > Board.MAX_BOARD_SIZE) {
 				throw new BattleshipException(error_BOARD_TOO_LARGE);
 			}
 		    // create Battleship instance
+            System.out.println("Load ships from file? yes/no");
+            String configFile = null;
+            if (getUserResponce(0).equals("loadfromfile")) {
+                System.out.println("Enter file name in config directory");
+                configFile = getUserResponce(-1);
+            }
+            //System.out.println(getUserResponce(0));
 			Battleship bs;
-			String configFile = args.length == 1 ? null : args[1];
-			bs = new Battleship(dim, configFile);
+			bs = new Battleship(arrayDimension, configFile);
 			// enter main loop
 			bs.mainLoop();
 		}
@@ -253,4 +317,61 @@ public class Battleship {
 			System.err.println(error_ILLEGAL_NUM_ARGS);
 		} 
 	}
+    public static String getUserResponce(int question) {
+        System.out.print(userPrompt);
+        Scanner userChoiceLine = new Scanner(System.in);
+        Scanner userChoiceWord = new Scanner(userChoiceLine.nextLine());
+        String userChoiceWordS = userChoiceWord.next();
+        // Ask dimension
+        if (question == 1) {
+            if (Integer.parseInt(userChoiceWordS) > 9 | Integer.parseInt(userChoiceWordS) < 100 ) {
+                return userChoiceWordS;
+            }
+        }
+        // Save to file?
+        if (question == 0) {
+            if (userChoiceWordS.equals("yes")) {
+                return "loadfromfile";
+            } else {
+                System.out.println("Loading random");
+                return "loadrandom";
+            }
+        }
+        // Ask filename
+        if (question == -1) {
+            URL fileURL = Battleship.class.getClassLoader().getResource(userChoiceWordS);
+            if (fileURL == null) {
+                System.out.println("No file found, loading random");
+                return null;
+            }
+            String configFile = fileURL.getPath();
+            System.out.println("Using file " + configFile);
+            return configFile;
+        }
+    return null;
+    }
+    public void saveGame() {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheetHits = workbook.createSheet("Hits");
+        HSSFSheet sheetShips = workbook.createSheet("Ships");
+        Row row;
+        row = sheetHits.createRow(0);
+        System.out.println(arrayDimension);
+        for (int i = 0; i < arrayDimension; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(i);
+        }
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(timeStamp + ".xls");
+            workbook.write(fileOut);
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Saved to " + timeStamp + ".xls");
+    }
+    public void loadGame() {
+        System.out.println("Loaded");
+    }
 }

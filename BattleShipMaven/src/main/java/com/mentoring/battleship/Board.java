@@ -1,6 +1,15 @@
 package com.mentoring.battleship;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
@@ -29,6 +38,8 @@ public class Board {
 	private int missilesFired = 0;
 	private int numHits = 0;
 	Random rand = new Random();
+    private String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
+    private String filePrefix;
 
 	// Constructor. Create board with ships
 	public Board(int dim, String configFile ) throws BattleshipException {
@@ -207,7 +218,7 @@ public class Board {
 			System.out.printf("%3d", col);
 		}
 		System.out.println();
-		
+
 		// print each row
 		for (int row=0; row< dimension; row++) {
 			System.out.printf("%3d", row);
@@ -220,7 +231,63 @@ public class Board {
 			System.out.println();
 		}
 	}
-	
+
+    public void saveGame(){
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheetHits, sheetShips;
+        if (isHuman()) {
+            sheetHits = workbook.createSheet("My Hits");
+            sheetShips = workbook.createSheet("My Ships");
+            filePrefix = "_my";
+        } else {
+            sheetHits = workbook.createSheet("Comp Hits");
+            sheetShips = workbook.createSheet("Comp Ships");
+            filePrefix = "_comp";
+        }
+
+        //1 line header
+        /*Row rowHeader = sheetHits.createRow(0);
+        System.out.println(dimension);
+        for (int i = 0; i < dimension; i++) {
+            Cell cellHeader = rowHeader.createCell(i+1);
+            cellHeader.setCellValue(i);
+        }*/
+        Row rowBodyShips, rowBodyHits;
+        Cell cellBodyShips, cellBodyHits;
+        rowBodyHits = sheetHits.createRow(0);
+        cellBodyHits = rowBodyHits.createCell(0);
+        cellBodyHits.setCellValue(dimension);
+        rowBodyShips = sheetShips.createRow(0);
+        cellBodyShips = rowBodyShips.createCell(0);
+        cellBodyShips.setCellValue(dimension);
+        for (int i = 0; i < dimension; i++ ) {
+            rowBodyHits = sheetHits.createRow(i + 1);
+            rowBodyShips = sheetShips.createRow(i + 1);
+            cellBodyHits = rowBodyHits.createCell(i);
+            cellBodyShips = rowBodyShips.createCell(i);
+            cellBodyHits.setCellValue(i);
+            cellBodyShips.setCellValue(i);
+            for (int j = 0; j < dimension; j++) {
+                BoardCell piece = getPiece(i, j);
+                cellBodyHits = rowBodyHits.createCell(j);
+                cellBodyShips = rowBodyShips.createCell(j);
+                cellBodyHits.setCellValue(piece.getVal(false));
+                cellBodyShips.setCellValue(piece.getVal(true));
+            }
+        }
+        try {
+            FileOutputStream fileOut = new FileOutputStream(timeStamp + filePrefix + ".xls");
+            workbook.write(fileOut);
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Saved to " + timeStamp + filePrefix + ".xls");
+    }
+    public void loadGame() {
+        System.out.println("Loaded");
+    }
+
 	public boolean fire(int x, int y) {
 		// cannot fire on an invalid spot, or a cell that was already hit
 		// (i.e. contains a crater)
@@ -325,4 +392,5 @@ public class Board {
     public void setHuman(boolean human) {
         this.human = human;
     }
+
 }
