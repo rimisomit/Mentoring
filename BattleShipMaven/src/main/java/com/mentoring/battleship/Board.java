@@ -233,6 +233,8 @@ public class Board {
 		}
 	}
 
+
+/*
     public void saveGame() throws IOException {
         //HSSFWorkbook workbook = new HSSFWorkbook();
         POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("template.xls"));
@@ -270,19 +272,19 @@ public class Board {
                 cellBodyShips.setCellValue(piece.getVal(true));
             }
         }
-        try {
+        //try {
             FileOutputStream fileOut = new FileOutputStream(timeStamp + filePrefix + ".xls");
             workbook.write(fileOut);
             fileOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
         System.out.println("Saved to " + timeStamp + filePrefix + ".xls");
     }
     public void loadGame() {
         System.out.println("Loaded");
     }
-
+*/
 	public boolean fire(int x, int y) {
 		// cannot fire on an invalid spot, or a cell that was already hit
 		// (i.e. contains a crater)

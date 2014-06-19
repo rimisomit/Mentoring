@@ -1,14 +1,9 @@
-+1. Create sh (shell script) with jar + classpath
-+2. Remove manifest
-+3. Create xls from template
-4. Current--Create save game class (File => Class => Object) [Constructor(variables) -> Class-Instance(values)]
++4. Current--Create save game class (File => Class => Object) [Constructor(variables) -> Class-Instance(values)]
 5. Improve logic shooting ()
 
-----------------
-Meeting 1 per week .. 1 per to weeks
-1. Task
-2. Done
-3. Stoppers
-4. To Do next week
-5. Feedback (Good, To Improve)
-6. Vova will write follow-ups
+<Q>
+1. JavaDoc
+2. Code convention. CheckStyle
+3. Unit testing
+4. Exceptions
+</Q>

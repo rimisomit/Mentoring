@@ -2,11 +2,6 @@ package com.mentoring.battleship;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import java.text.SimpleDateFormat;
 
 /**
@@ -60,7 +55,7 @@ public class Battleship {
 	private final static String cmd_QUIT = "quit";
     private final static String cmd_EXIT = "exit";
     private final static String cmd_SAVE = "save";
-	private Board board, myBoard;
+	private Board compBoard, myBoard;
 	private final static String userPrompt = "[Battleship] user$ > ";
     private final static String compPrompt = "[Battleship] comp$ > ";
     private static int arrayDimension;
@@ -69,8 +64,8 @@ public class Battleship {
     //constructor. Create game with two boards
 	public Battleship(int dim, String configFile) throws BattleshipException {
 		// create board from file
-		board = new Board(dim, configFile);
-        board.setHuman(false);
+		compBoard = new Board(dim, configFile);
+        compBoard.setHuman(false);
         myBoard = new Board(dim, configFile);
         myBoard.setHuman(true);
 	}
@@ -129,10 +124,10 @@ public class Battleship {
                         // >view/show board or ships
 						if (type.equals(cmd_compBOARD)) {
                             System.out.println("\t\t Opponent's board");
-							board.display(false);
+							compBoard.display(false);
 						} else if (type.equals(cmd_compSHIPS)) {
                             System.out.println("\t\t Opponent's board cheat mode");
-							board.display(true);
+							compBoard.display(true);
                         } else if (type.equals(cmd_myBOARD)) {
                             System.out.println("\t\t My board");
                             myBoard.display(false);
@@ -166,20 +161,20 @@ public class Battleship {
 						System.out.println(error_WRONG_ARGUMENTS);
 						continue;
 					}
-					if (!board.isValid(row, col)) {
+					if (!compBoard.isValid(row, col)) {
                         System.out.println(error_ILLEGAL_COORDINATES);
                     }
 					else {
                         //player fire
-						if (board.fire(row, col)) {
-							if (board.checkWin()) {
+						if (compBoard.fire(row, col)) {
+							if (compBoard.checkWin()) {
 								System.out.println(msg_youWIN);
-								board.display(false);
-								printStats(board);
+								compBoard.display(false);
+								printStats(compBoard);
 								return;
 							}
                             System.out.println("\t\t Opponent's board");
-							board.display(false);
+							compBoard.display(false);
                             try {
                                 Thread.sleep(3000);
                             } catch (InterruptedException e) {
@@ -215,7 +210,7 @@ public class Battleship {
 					if (wordScanner.hasNext()) {
 						System.out.println(error_WRONG_ARGUMENTS);
 					} else {
-						printStats(board);
+						printStats(compBoard);
 					}
                 } else if (cmd.equals(cmd_CompStats)) {
                     if (wordScanner.hasNext()) {
@@ -234,8 +229,7 @@ public class Battleship {
                     if (wordScanner.hasNext()) {
                         System.out.println(error_WRONG_ARGUMENTS);
                     } else {
-                        board.saveGame();
-                        myBoard.saveGame();
+                        saveGame(myBoard, compBoard);
                     }
 				} else if (cmd.equals(cmd_QUIT) | cmd.equals(cmd_EXIT)) {
 					if (wordScanner.hasNext()) {
@@ -326,32 +320,13 @@ public class Battleship {
         }
     return null;
     }
-    /*public void saveGame() throws IOException {
-        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("template.xls"));
-        HSSFWorkbook workbook = new HSSFWorkbook(fs, true);
-        //HSSFSheet sheetHits = workbook.createSheet("Hits");
-        HSSFSheet sheetHits = workbook.getSheet("Hits");
-        //HSSFSheet sheetShips = workbook.createSheet("Ships");
-        HSSFSheet sheetShips = workbook.getSheet("Ships");
 
-        Row row;
-        row = sheetHits.createRow(0);
-        System.out.println(arrayDimension);
-        for (int i = 0; i < arrayDimension; i++) {
-            Cell cell = row.createCell(i);
-            cell.setCellValue(i);
-        }
-
-        try {
-            FileOutputStream fileOut = new FileOutputStream(timeStamp + ".xls");
-            workbook.write(fileOut);
-            fileOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Saved to " + timeStamp + ".xls");
-    }*/
     public void loadGame() {
         System.out.println("Loaded");
+    }
+
+    public void saveGame(Board mBoard, Board cBoard) throws IOException {
+        FileSaveGame fileSaveGame = new FileSaveGame("template.xls");
+        fileSaveGame.saveBoardToFile(mBoard, cBoard);
     }
 }
