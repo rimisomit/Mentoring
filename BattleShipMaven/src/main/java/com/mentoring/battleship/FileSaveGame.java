@@ -102,8 +102,6 @@ public class FileSaveGame {
         FileOutputStream fileOut = new FileOutputStream(timeStamp + ".xls");
         workbook.write(fileOut);
         fileOut.close();
+        System.out.println("Saved to " + timeStamp + ".xls");
     }
-
-
-
 }

@@ -5,5 +5,5 @@
 1. JavaDoc
 2. Code convention. CheckStyle
 3. Unit testing
-4. Exceptions
+4. Exceptions. Try .. catch  vs add to method signature
 </Q>

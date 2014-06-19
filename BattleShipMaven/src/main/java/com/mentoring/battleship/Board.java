@@ -233,58 +233,6 @@ public class Board {
 		}
 	}
 
-
-/*
-    public void saveGame() throws IOException {
-        //HSSFWorkbook workbook = new HSSFWorkbook();
-        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("template.xls"));
-        HSSFWorkbook workbook = new HSSFWorkbook(fs, true);
-        HSSFSheet sheetHits, sheetShips;
-        if (isHuman()) {
-            sheetHits = workbook.createSheet("My Hits");
-            sheetShips = workbook.createSheet("My Ships");
-            filePrefix = "_my";
-        } else {
-            sheetHits = workbook.createSheet("Comp Hits");
-            sheetShips = workbook.createSheet("Comp Ships");
-            filePrefix = "_comp";
-        }
-        Row rowBodyShips, rowBodyHits;
-        Cell cellBodyShips, cellBodyHits;
-        rowBodyHits = sheetHits.createRow(0);
-        cellBodyHits = rowBodyHits.createCell(0);
-        cellBodyHits.setCellValue(dimension);
-        rowBodyShips = sheetShips.createRow(0);
-        cellBodyShips = rowBodyShips.createCell(0);
-        cellBodyShips.setCellValue(dimension);
-        for (int i = 0; i < dimension; i++ ) {
-            rowBodyHits = sheetHits.createRow(i + 1);
-            rowBodyShips = sheetShips.createRow(i + 1);
-            cellBodyHits = rowBodyHits.createCell(i);
-            cellBodyShips = rowBodyShips.createCell(i);
-            cellBodyHits.setCellValue(i);
-            cellBodyShips.setCellValue(i);
-            for (int j = 0; j < dimension; j++) {
-                BoardCell piece = getPiece(i, j);
-                cellBodyHits = rowBodyHits.createCell(j);
-                cellBodyShips = rowBodyShips.createCell(j);
-                cellBodyHits.setCellValue(piece.getVal(false));
-                cellBodyShips.setCellValue(piece.getVal(true));
-            }
-        }
-        //try {
-            FileOutputStream fileOut = new FileOutputStream(timeStamp + filePrefix + ".xls");
-            workbook.write(fileOut);
-            fileOut.close();
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-        System.out.println("Saved to " + timeStamp + filePrefix + ".xls");
-    }
-    public void loadGame() {
-        System.out.println("Loaded");
-    }
-*/
 	public boolean fire(int x, int y) {
 		// cannot fire on an invalid spot, or a cell that was already hit
 		// (i.e. contains a crater)

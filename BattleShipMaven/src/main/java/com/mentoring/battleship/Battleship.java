@@ -98,7 +98,7 @@ public class Battleship {
         System.out.println("Number of ships sunk: " + b.getShipsSunk());
     }
 
-	private void mainLoop() throws IOException {
+	private void mainLoop() throws IOException, InterruptedException {
 		// display my board with ships
         System.out.println("\t\tMy board");
         myBoard.display(true);
@@ -175,21 +175,13 @@ public class Battleship {
 							}
                             System.out.println("\t\t Opponent's board");
 							compBoard.display(false);
-                            try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            Thread.sleep(3000);
                         }
                         //comp fire
                         row = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
                         col = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
                         System.out.println(compPrompt + " fire " + row + " " + col);
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        Thread.sleep(3000);
                         clearConsole();
                         if (myBoard.fire(row, col)) {
                             if (myBoard.checkWin()) {
@@ -243,20 +235,16 @@ public class Battleship {
 		} while (!(cmd.equals(cmd_QUIT)|cmd.equals(cmd_EXIT)));
 	}
 
-    public void clearConsole() {
-        try {
+    public void clearConsole() throws IOException {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) {
                 Runtime.getRuntime().exec("cls");
             } else {
                 Runtime.getRuntime().exec("clear");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		try {
             System.out.println("Choose board size 10 .. 100");
             arrayDimension = Integer.parseInt(getUserResponce(1));
