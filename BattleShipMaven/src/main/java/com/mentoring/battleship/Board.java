@@ -1,6 +1,7 @@
 package com.mentoring.battleship;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
@@ -232,8 +233,10 @@ public class Board {
 		}
 	}
 
-    public void saveGame(){
-        HSSFWorkbook workbook = new HSSFWorkbook();
+    public void saveGame() throws IOException {
+        //HSSFWorkbook workbook = new HSSFWorkbook();
+        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("template.xls"));
+        HSSFWorkbook workbook = new HSSFWorkbook(fs, true);
         HSSFSheet sheetHits, sheetShips;
         if (isHuman()) {
             sheetHits = workbook.createSheet("My Hits");
@@ -244,14 +247,6 @@ public class Board {
             sheetShips = workbook.createSheet("Comp Ships");
             filePrefix = "_comp";
         }
-
-        //1 line header
-        /*Row rowHeader = sheetHits.createRow(0);
-        System.out.println(dimension);
-        for (int i = 0; i < dimension; i++) {
-            Cell cellHeader = rowHeader.createCell(i+1);
-            cellHeader.setCellValue(i);
-        }*/
         Row rowBodyShips, rowBodyHits;
         Cell cellBodyShips, cellBodyHits;
         rowBodyHits = sheetHits.createRow(0);

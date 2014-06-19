@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.*;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import java.text.SimpleDateFormat;
@@ -24,9 +25,6 @@ import java.text.SimpleDateFormat;
 // java -jar <filename>.jar
 //    or
 // java -cp config:target/BattleShip-1.0-SNAPSHOT.jar com.mentoring.battleship.Battleship
-// TODO put config file inside classpath
-// bs.getClass().getClassLoader().getResourceAsStream();
-// Done
 
 public class Battleship {
 	// Predefined error messages
@@ -105,7 +103,7 @@ public class Battleship {
         System.out.println("Number of ships sunk: " + b.getShipsSunk());
     }
 
-	private void mainLoop() {
+	private void mainLoop() throws IOException {
 		// display my board with ships
         System.out.println("\t\tMy board");
         myBoard.display(true);
@@ -264,31 +262,8 @@ public class Battleship {
         }
     }
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		try {
-            /*
-            Scanner userChoiceLine = new Scanner(System.in);
-            Scanner userChoiceWord = new Scanner(userChoiceLine.nextLine());
-            if (userChoiceWord.next().equals("yes")) {
-                System.out.println("using file");
-                String configFile = "/home/user/Dropbox/git/Mentoring/Battleship/src/bt2/ships.conf";
-            }
-            System.out.println("Load ships from file? yes/no");
-            System.out.print(userPrompt);
-            userChoiceLine = new Scanner(System.in);
-            userChoiceWord = new Scanner(userChoiceLine.nextLine());
-            if (Integer.parseInt(userChoiceWord.next()) > 9 | Integer.parseInt(userChoiceWord.next()) < 100 ) {
-                System.out.println();
-            }
-
-            // Check arguments. >java Battleship N [config-file]
-			if (args.length < 1 || args.length > 2) {
-				throw new BattleshipException(error_ILLEGAL_NUM_ARGS);
-			}
-			*/
-            //String userPrams[] = new String[2];
-            //userPrams = getUserSetup();
-			// Read input params
             System.out.println("Choose board size 10 .. 100");
             arrayDimension = Integer.parseInt(getUserResponce(1));
             // check min..max size
@@ -328,7 +303,7 @@ public class Battleship {
                 return userChoiceWordS;
             }
         }
-        // Save to file?
+        // load board to file?
         if (question == 0) {
             if (userChoiceWordS.equals("yes")) {
                 return "loadfromfile";
@@ -340,6 +315,7 @@ public class Battleship {
         // Ask filename
         if (question == -1) {
             URL fileURL = Battleship.class.getClassLoader().getResource(userChoiceWordS);
+            //URL fileURL = Battleship.class.getClassLoader().getResource("Myconfig");
             if (fileURL == null) {
                 System.out.println("No file found, loading random");
                 return null;
@@ -350,10 +326,14 @@ public class Battleship {
         }
     return null;
     }
-    public void saveGame() {
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheetHits = workbook.createSheet("Hits");
-        HSSFSheet sheetShips = workbook.createSheet("Ships");
+    /*public void saveGame() throws IOException {
+        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("template.xls"));
+        HSSFWorkbook workbook = new HSSFWorkbook(fs, true);
+        //HSSFSheet sheetHits = workbook.createSheet("Hits");
+        HSSFSheet sheetHits = workbook.getSheet("Hits");
+        //HSSFSheet sheetShips = workbook.createSheet("Ships");
+        HSSFSheet sheetShips = workbook.getSheet("Ships");
+
         Row row;
         row = sheetHits.createRow(0);
         System.out.println(arrayDimension);
@@ -370,7 +350,7 @@ public class Battleship {
             e.printStackTrace();
         }
         System.out.println("Saved to " + timeStamp + ".xls");
-    }
+    }*/
     public void loadGame() {
         System.out.println("Loaded");
     }
