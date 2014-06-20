@@ -27,7 +27,7 @@ public class FileSaveGame {
     private String templateName;
 
 
-    public FileSaveGame(String templName) throws IOException {
+    public FileSaveGame(String templName){
         this.templateName = templName;
     }
 

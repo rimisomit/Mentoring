@@ -60,6 +60,7 @@ public class Battleship {
     private final static String compPrompt = "[Battleship] comp$ > ";
     private static int arrayDimension;
     String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
+    private FileSaveGame fileSaveGame;
 
     //constructor. Create game with two boards
 	public Battleship(int dim, String configFile) throws BattleshipException {
@@ -68,6 +69,8 @@ public class Battleship {
         compBoard.setHuman(false);
         myBoard = new Board(dim, configFile);
         myBoard.setHuman(true);
+        fileSaveGame = new FileSaveGame("resources/template.xls");
+
 	}
 
     // >help output
@@ -221,7 +224,8 @@ public class Battleship {
                     if (wordScanner.hasNext()) {
                         System.out.println(error_WRONG_ARGUMENTS);
                     } else {
-                        saveGame(myBoard, compBoard);
+
+                       fileSaveGame.saveBoardToFile(myBoard, compBoard);
                     }
 				} else if (cmd.equals(cmd_QUIT) | cmd.equals(cmd_EXIT)) {
 					if (wordScanner.hasNext()) {
@@ -313,8 +317,4 @@ public class Battleship {
         System.out.println("Loaded");
     }
 
-    public void saveGame(Board mBoard, Board cBoard) throws IOException {
-        FileSaveGame fileSaveGame = new FileSaveGame("resources/template.xls");
-        fileSaveGame.saveBoardToFile(mBoard, cBoard);
-    }
 }

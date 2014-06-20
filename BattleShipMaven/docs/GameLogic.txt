@@ -1,6 +1,6 @@
 1. Layout
 1.1 Objects can be near borders
-1.2 Distance between nearest objects - one cell
+1.2 Distance between nearest objects >= one cell
 1.3 Ships size and count doesnt matter
 
 2. Shooting sequence
@@ -17,7 +17,7 @@
 2.3 User side
 2.3.1. if not hit
 2.3.1.1 build new shooting_array w/o cell(2.1.2)
-2.3.1.2 Fire at sooting_array(2.3.1.1)
+2.3.1.2 Fire randomly at sooting_array(2.3.1.1)
 2.3.2 if hit
 2.3.2.1 if not sunk
 2.3.2.1.1 buld new shooting_array w/o cell(2.1.2)
