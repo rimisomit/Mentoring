@@ -1,5 +1,6 @@
 package com.mentoring.battleship;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.text.SimpleDateFormat;
@@ -69,7 +70,7 @@ public class Battleship {
         compBoard.setHuman(false);
         myBoard = new Board(dim, configFile);
         myBoard.setHuman(true);
-        fileSaveGame = new FileSaveGame("resources/template.xls");
+        fileSaveGame = new FileSaveGame("template.xls");
 
 	}
 
@@ -101,7 +102,7 @@ public class Battleship {
         System.out.println("Number of ships sunk: " + b.getShipsSunk());
     }
 
-	private void mainLoop() throws IOException, InterruptedException {
+	private void mainLoop() throws IOException, InterruptedException, URISyntaxException {
 		// display my board with ships
         System.out.println("\t\tMy board");
         myBoard.display(true);
@@ -248,7 +249,7 @@ public class Battleship {
             }
     }
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
 		try {
             System.out.println("Choose board size 10 .. 100");
             arrayDimension = Integer.parseInt(getUserResponce(1));

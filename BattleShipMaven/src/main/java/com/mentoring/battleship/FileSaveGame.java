@@ -8,9 +8,10 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -31,14 +32,18 @@ public class FileSaveGame {
         this.templateName = templName;
     }
 
-    public void saveBoardToFile(Board myBoard, Board compBoard) throws IOException {
+    public void saveBoardToFile(Board myBoard, Board compBoard) throws IOException, URISyntaxException {
         int dimension;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
 
-        //POIFSFileSystem dr = new POIFSFileSystem(new FileInputStream("save"));
-        //DirectoryNode directoryNode = new DirectoryNode();
 
-        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(templateName));
+        //URL url = getClass().getClassLoader().getResource("/resources/template.xls");
+        //System.out.println(url.toString());
+        File file = new File("resources/template.xls");
+        FileInputStream fileInputStream = new FileInputStream(file);
+        //fileInputStream = this.getClass().getResourceAsStream(templateName);
+
+        POIFSFileSystem fs = new POIFSFileSystem(fileInputStream);
         HSSFWorkbook workbook = new HSSFWorkbook(fs, true);
         HSSFSheet sheetMyHits;
         HSSFSheet sheetMyShips;
