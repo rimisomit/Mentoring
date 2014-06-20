@@ -314,7 +314,7 @@ public class Battleship {
     }
 
     public void saveGame(Board mBoard, Board cBoard) throws IOException {
-        FileSaveGame fileSaveGame = new FileSaveGame("template.xls");
+        FileSaveGame fileSaveGame = new FileSaveGame("resources/template.xls");
         fileSaveGame.saveBoardToFile(mBoard, cBoard);
     }
 }

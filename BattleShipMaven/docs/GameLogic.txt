@@ -1,0 +1,29 @@
+1. Layout
+1.1 Objects can be near borders
+1.2 Distance between nearest objects - one cell
+1.3 Ships size and count doesnt matter
+
+2. Shooting sequence
+2.1 User side
+2.1.1 Build shooting_array of all cells
+2.1.2 Fire at random sell
+2.1.3 Remember hit/not hit
+
+2.2 Comp side
+2.2.1 eq(2.1.1)
+2.2.2 eq(2.1.2)
+2.2.3 eq(2.1.3)
+
+2.3 User side
+2.3.1. if not hit
+2.3.1.1 build new shooting_array w/o cell(2.1.2)
+2.3.1.2 Fire at sooting_array(2.3.1.1)
+2.3.2 if hit
+2.3.2.1 if not sunk
+2.3.2.1.1 buld new shooting_array w/o cell(2.1.2)
+2.3.2.1.2 build new shooting_small_array one_cell(up,down,left, right) check for borders
+2.3.2.2 if sunk
+2.3.2.2.1 build new shooting_array w/o cell(2.1.2)
+
+2.4 Comp side
+eq User's

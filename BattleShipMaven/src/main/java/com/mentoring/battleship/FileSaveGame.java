@@ -2,6 +2,8 @@ package com.mentoring.battleship;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.DirectoryEntry;
+import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -32,6 +34,9 @@ public class FileSaveGame {
     public void saveBoardToFile(Board myBoard, Board compBoard) throws IOException {
         int dimension;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
+
+        //POIFSFileSystem dr = new POIFSFileSystem(new FileInputStream("save"));
+        //DirectoryNode directoryNode = new DirectoryNode();
 
         POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(templateName));
         HSSFWorkbook workbook = new HSSFWorkbook(fs, true);
@@ -99,7 +104,7 @@ public class FileSaveGame {
                 cellBodyCompShips.setCellValue(compPiece.getVal(true));
             }
         }
-        FileOutputStream fileOut = new FileOutputStream(timeStamp + ".xls");
+        FileOutputStream fileOut = new FileOutputStream("save/" + timeStamp + ".xls");
         workbook.write(fileOut);
         fileOut.close();
         System.out.println("Saved to " + timeStamp + ".xls");
