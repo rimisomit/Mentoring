@@ -36,12 +36,8 @@ public class FileSaveGame {
         int dimension;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
 
-
-        //URL url = getClass().getClassLoader().getResource("/resources/template.xls");
-        //System.out.println(url.toString());
         File file = new File("resources/template.xls");
         FileInputStream fileInputStream = new FileInputStream(file);
-        //fileInputStream = this.getClass().getResourceAsStream(templateName);
 
         POIFSFileSystem fs = new POIFSFileSystem(fileInputStream);
         HSSFWorkbook workbook = new HSSFWorkbook(fs, true);

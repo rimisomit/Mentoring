@@ -25,6 +25,7 @@ public class Ship extends BoardCell {
 		private final int hitPoints;
 		private final String cheatVal;
 		private final String nocheatVal;
+
 		// constructor
 		ShipType(int hitPoints, String cheatVal, String nocheatVal) {
 			this.hitPoints = hitPoints;

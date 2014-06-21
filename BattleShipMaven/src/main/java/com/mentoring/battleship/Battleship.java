@@ -9,18 +9,6 @@ import java.text.SimpleDateFormat;
  * Main class
  * Main loop, Checking input commands
  */
-// TODO compile and run
-// javac -d classes -cp src src/com/bt/Battleship.java
-// --run with classpath
-// java -cp classes com.mentoring.bt.Battleship 10
-// TODO create jar
-// jar cvf bin/btjar.jar src/META-INF/MANIFEST.MF classes/
-// TODO execute
-// java -cp bin:bin/btjar.jar com.mentoring.bt.Battleship
-//    or
-// java -jar <filename>.jar
-//    or
-// java -cp config:target/BattleShip-1.0-SNAPSHOT.jar com.mentoring.battleship.Battleship
 
 public class Battleship {
 	// Predefined error messages
@@ -170,6 +158,7 @@ public class Battleship {
                     }
 					else {
                         //player fire
+                        //==========================================================================
 						if (compBoard.fire(row, col)) {
 							if (compBoard.checkWin()) {
 								System.out.println(msg_youWIN);
@@ -177,15 +166,17 @@ public class Battleship {
 								printStats(compBoard);
 								return;
 							}
+                            Thread.sleep(3000);
                             System.out.println("\t\t Opponent's board");
 							compBoard.display(false);
-                            Thread.sleep(3000);
+                        } else {
+                            System.out.println(error_SAME_COORDINATES);
                         }
                         //comp fire
+                        //==========================================================================
                         row = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
                         col = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
                         System.out.println(compPrompt + " fire " + row + " " + col);
-                        Thread.sleep(3000);
                         clearConsole();
                         if (myBoard.fire(row, col)) {
                             if (myBoard.checkWin()) {
@@ -194,12 +185,14 @@ public class Battleship {
                                 printStats(myBoard);
                                 return;
                                 }
+                            Thread.sleep(3000);
                             System.out.println("\t\t My board");
                             myBoard.display(false);
                             System.out.println(" -----------Round End--------------");
 						} else {
 							System.out.println(error_SAME_COORDINATES);
 						}
+                    //=============================================================================
 					}
                 // >stats
 				} else if (cmd.equals(cmd_MyStats)) {
@@ -279,6 +272,7 @@ public class Battleship {
 			System.err.println(error_ILLEGAL_NUM_ARGS);
 		} 
 	}
+
     public static String getUserResponce(int question) {
         System.out.print(userPrompt);
         Scanner userChoiceLine = new Scanner(System.in);
@@ -301,7 +295,7 @@ public class Battleship {
         }
         // Ask filename
         if (question == -1) {
-            URL fileURL = Battleship.class.getClassLoader().getResource(userChoiceWordS);
+            URL fileURL = Battleship.class.getClassLoader().getResource("config/" + userChoiceWordS);
             //URL fileURL = Battleship.class.getClassLoader().getResource("Myconfig");
             if (fileURL == null) {
                 System.out.println("No file found, loading random");

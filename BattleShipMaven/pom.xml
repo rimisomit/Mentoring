@@ -61,6 +61,7 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -112,7 +113,6 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/target/bin</outputDirectory>
-
                             <resources>
                                 <resource>
                                     <directory>${basedir}/src/main/bin</directory>
@@ -152,6 +152,7 @@
                 <configuration>
                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
                     <finalName>${project.artifactId}-${project.version}</finalName>
+                    <useDefaultManifestFile>false</useDefaultManifestFile>
                 </configuration>
             </plugin>
 
@@ -173,6 +174,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
                 <groupId>org.codehaus.mojo</groupId>
@@ -204,7 +206,6 @@
                     </execution>
                 </executions>
             </plugin>
-
 
         </plugins>
     </build>

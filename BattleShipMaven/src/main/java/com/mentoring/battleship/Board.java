@@ -1,16 +1,7 @@
 package com.mentoring.battleship;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
@@ -39,8 +30,6 @@ public class Board {
 	private int missilesFired = 0;
 	private int numHits = 0;
 	Random rand = new Random();
-    private String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
-    private String filePrefix;
 
 	// Constructor. Create board with ships
 	public Board(int dim, String configFile ) throws BattleshipException {
@@ -203,6 +192,7 @@ public class Board {
 	public boolean isValid(int x, int y) {
         return x >= 0 && x < dimension && y >= 0 && y < dimension;
     }
+
 	// Put specific piece(water, ship, etc) on coord
 	public void place(int x, int y, BoardCell piece) {
         grid[x][y] = piece;
@@ -252,6 +242,7 @@ public class Board {
 		}
 		return true;
 	}
+
     //Try to place one ship randomly
 	private void placeShipRandom(Ship ship) {
 		int row = 0, col = 0;
@@ -287,6 +278,7 @@ public class Board {
     }
 
     }
+
     // Place verified ship
 	private void placeShip(Ship ship, int row, int col) {
 		// input: ship size, stating coords
@@ -298,6 +290,7 @@ public class Board {
 		}	
 	}
     // Position verification
+
 	private boolean isShipPositionValid(Ship ship, int row, int col, int dir) {
 		int rowInc = 0;
 		int colInc = 0;
