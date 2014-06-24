@@ -6,19 +6,26 @@ package com.mentoring.battleship;
  */
 public class Water extends BoardCell {
 
-    //Constructor. Create water cell
+    /**
+     * Create water cell
+     * @param cheat
+     * @param nocheat
+     */
 	public Water(String cheat, String nocheat) {
 		super(cheat, nocheat);
 	}
-	@Override
+
+    @Override
 	public boolean isOccupied() {
         return false;
     }
-	@Override
+
+    @Override
 	public boolean wasHit() {
         return false;
     }
-	@Override
+
+    @Override
 	public boolean fireAt() {
 		System.out.println(Battleship.msg_MISS);
 		return false;

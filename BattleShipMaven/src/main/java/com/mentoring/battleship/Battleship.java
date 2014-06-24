@@ -29,6 +29,12 @@ public class Battleship {
 	public final static String msg_SUNK = "Sunk!";
 	public final static String msg_compWIN = "Comp win!";
     public final static String msg_youWIN = "You win!";
+    public String msg_fireERROR = "err";
+    public String msg_fireVICTORY = "victory";
+    public String msg_fireNOTHIT = "nothit";
+    public String msg_fireHIT = "hit";
+    public static String msg_loadFile = "loadfromfile";
+    public static String msg_loadRandom = "loadrandom";
 	// User cmd input commands
 	private final static String cmd_BLANK = "";
 	private final static String cmd_VIEW = "view";
@@ -48,10 +54,15 @@ public class Battleship {
 	private final static String userPrompt = "[Battleship] user$ > ";
     private final static String compPrompt = "[Battleship] comp$ > ";
     private static int arrayDimension;
-    String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
+    //String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
     private FileSaveGame fileSaveGame;
 
-    //constructor. Create game with two boards
+    /**
+     *
+     * @param dim
+     * @param configFile
+     * @throws BattleshipException
+     */
 	public Battleship(int dim, String configFile) throws BattleshipException {
 		// create board from file
 		compBoard = new Board(dim, configFile);
@@ -59,10 +70,11 @@ public class Battleship {
         myBoard = new Board(dim, configFile);
         myBoard.setHuman(true);
         fileSaveGame = new FileSaveGame("template.xls");
-
 	}
 
-    // >help output
+    /**
+     * help
+     */
 	private void printHelpMsg() {
 		System.out.println("List of commands:");
         System.out.println();
@@ -76,7 +88,11 @@ public class Battleship {
         System.out.println(" quit/exit - exits the game");
 	}
 
-    // >stats show statistic
+    /**
+     *
+     * @param b
+     * mystats, compstats
+     */
     private void printStats(Board b) {
         int numFired = b.getMissilesFired();
         if (b.isHuman()) {
@@ -90,6 +106,12 @@ public class Battleship {
         System.out.println("Number of ships sunk: " + b.getShipsSunk());
     }
 
+    /**
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws URISyntaxException
+     */
 	private void mainLoop() throws IOException, InterruptedException, URISyntaxException {
 		// display my board with ships
         System.out.println("\t\tMy board");
@@ -134,65 +156,13 @@ public class Battleship {
 					}
                 // >fire
 				} else if (cmd.equals(cmd_FIRE)) {
-					int row=0, col=0;
-					if (wordScanner.hasNextInt()) {
-                        row = wordScanner.nextInt();
-                    }
-					else {
-						System.out.println(error_ILLEGAL_COMMAND);
-						continue;
-					}
-					if (wordScanner.hasNextInt()) {
-                        col = wordScanner.nextInt();
-                    }
-					else {
-						System.out.println(error_ILLEGAL_COMMAND);
-						continue;
-					}
-					if (wordScanner.hasNext()) {
-						System.out.println(error_WRONG_ARGUMENTS);
-						continue;
-					}
-					if (!compBoard.isValid(row, col)) {
-                        System.out.println(error_ILLEGAL_COORDINATES);
-                    }
-					else {
-                        //player fire
-                        //==========================================================================
-						if (compBoard.fire(row, col)) {
-							if (compBoard.checkWin()) {
-								System.out.println(msg_youWIN);
-								compBoard.display(false);
-								printStats(compBoard);
-								return;
-							}
-                            Thread.sleep(3000);
-                            System.out.println("\t\t Opponent's board");
-							compBoard.display(false);
-                        } else {
-                            System.out.println(error_SAME_COORDINATES);
+                     if (userFire(wordScanner).equals(msg_fireHIT)) {
+                         continue;
+                     }
+                    //FIXME
+                    while (compFire().equals(msg_fireHIT)) {
                         }
-                        //comp fire
-                        //==========================================================================
-                        row = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
-                        col = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
-                        System.out.println(compPrompt + " fire " + row + " " + col);
-                        clearConsole();
-                        if (myBoard.fire(row, col)) {
-                            if (myBoard.checkWin()) {
-                                System.out.println(msg_compWIN);
-                                myBoard.display(false);
-                                printStats(myBoard);
-                                return;
-                                }
-                            Thread.sleep(3000);
-                            System.out.println("\t\t My board");
-                            myBoard.display(false);
-                            System.out.println(" -----------Round End--------------");
-						} else {
-							System.out.println(error_SAME_COORDINATES);
-						}
-                    //=============================================================================
+                    System.out.println(" -----------Round End--------------");
 					}
                 // >stats
 				} else if (cmd.equals(cmd_MyStats)) {
@@ -229,10 +199,13 @@ public class Battleship {
 				} else if (!cmd.equals(cmd_BLANK)){
 					System.out.println(error_ILLEGAL_COMMAND);
 				}
-			}
 		} while (!(cmd.equals(cmd_QUIT)|cmd.equals(cmd_EXIT)));
 	}
 
+    /**
+     *
+     * @throws IOException
+     */
     public void clearConsole() throws IOException {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) {
@@ -242,10 +215,17 @@ public class Battleship {
             }
     }
 
+    /**
+     *
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws URISyntaxException
+     */
 	public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
 		try {
             System.out.println("Choose board size 10 .. 100");
-            arrayDimension = Integer.parseInt(getUserResponce(1));
+            arrayDimension = Integer.parseInt(getUserResponse(1));
             // check min..max size
 			if (arrayDimension < Board.MIN_BOARD_SIZE) {
 				throw new BattleshipException(error_BOARD_TOO_SMALL);
@@ -255,11 +235,11 @@ public class Battleship {
 		    // create Battleship instance
             System.out.println("Load ships from file? yes/no");
             String configFile = null;
-            if (getUserResponce(0).equals("loadfromfile")) {
+            if (getUserResponse(0).equals(msg_loadFile)) {
                 System.out.println("Enter file name in config directory");
-                configFile = getUserResponce(-1);
+                configFile = getUserResponse(-1);
             }
-            //System.out.println(getUserResponce(0));
+            //System.out.println(getUserResponse(0));
 			Battleship bs;
 			bs = new Battleship(arrayDimension, configFile);
 			// enter main loop
@@ -273,7 +253,12 @@ public class Battleship {
 		} 
 	}
 
-    public static String getUserResponce(int question) {
+    /**
+     *
+     * @param question
+     * @return dimension|filename
+     */
+    public static String getUserResponse(int question) {
         System.out.print(userPrompt);
         Scanner userChoiceLine = new Scanner(System.in);
         Scanner userChoiceWord = new Scanner(userChoiceLine.nextLine());
@@ -287,10 +272,10 @@ public class Battleship {
         // load board to file?
         if (question == 0) {
             if (userChoiceWordS.equals("yes")) {
-                return "loadfromfile";
+                return msg_loadFile;
             } else {
                 System.out.println("Loading random");
-                return "loadrandom";
+                return msg_loadRandom;
             }
         }
         // Ask filename
@@ -308,8 +293,92 @@ public class Battleship {
     return null;
     }
 
-    public void loadGame() {
-        System.out.println("Loaded");
+    /**
+     *
+     * @return string hit | not hit
+     * @throws InterruptedException
+     */
+    public String compFire() throws InterruptedException {
+        int row=0, col=0;
+        row = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
+        col = myBoard.rand.nextInt(myBoard.getDim()-2) + 1;
+        System.out.println(compPrompt + " fire " + row + " " + col);
+        //clearConsole();
+        if (myBoard.fire(row, col)) {
+            if (myBoard.checkWin()) {
+                System.out.println(msg_compWIN);
+                myBoard.display(false);
+                printStats(myBoard);
+                return msg_fireVICTORY;
+            }
+            Thread.sleep(2000);
+            System.out.println("\t\t My board");
+            myBoard.display(false);
+        } else {
+            System.out.println(error_SAME_COORDINATES);
+            return msg_HIT;
+        }
+        System.out.println("Value = " + myBoard.getPieceValue(row, col));
+        if (myBoard.getPieceValue(row, col).equals("X")) {
+            return msg_fireHIT;
+        } else {
+            return msg_fireNOTHIT;
+        }
     }
 
+    /**
+     *
+     * @param wordScanner
+     * @return string hit | not hit
+     * @throws InterruptedException
+     */
+    public String userFire(Scanner wordScanner) throws InterruptedException {
+        int row=0, col=0;
+
+        if (wordScanner.hasNextInt()) {
+            row = wordScanner.nextInt();
+        }
+        else {
+            System.out.println(error_ILLEGAL_COMMAND);
+            //continue;
+            return msg_fireERROR;
+        }
+        if (wordScanner.hasNextInt()) {
+            col = wordScanner.nextInt();
+        }
+        else {
+            System.out.println(error_ILLEGAL_COMMAND);
+            //continue;
+            return msg_fireERROR;
+        }
+        if (wordScanner.hasNext()) {
+            System.out.println(error_WRONG_ARGUMENTS);
+            //continue;
+            return msg_fireERROR;
+        }
+        if (!compBoard.isValid(row, col)) {
+            System.out.println(error_ILLEGAL_COORDINATES);
+            return msg_fireERROR;
+        }
+        if (compBoard.fire(row, col)) {
+            if (compBoard.checkWin()) {
+                System.out.println(msg_youWIN);
+                compBoard.display(false);
+                printStats(compBoard);
+                return msg_fireVICTORY;
+            }
+            Thread.sleep(2000);
+            System.out.println("\t\t Opponent's board");
+            compBoard.display(false);
+            System.out.println("Value = " + myBoard.getPieceValue(row, col));
+            if (compBoard.getPieceValue(row, col).equals("X")) {
+                return msg_fireHIT;
+            } else {
+                return msg_fireNOTHIT;
+            }
+        } else {
+            System.out.println(error_SAME_COORDINATES);
+            return msg_fireHIT;
+        }
+    }
 }

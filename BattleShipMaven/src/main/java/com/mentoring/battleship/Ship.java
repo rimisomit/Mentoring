@@ -47,8 +47,13 @@ public class Ship extends BoardCell {
 	private int hitPoints;
 	private int dir;
 	private boolean sunk = false;
+    private boolean isHit = false;
 
-    // Constructor.
+    /**
+     *
+     * @param ship
+     * @param dir
+     */
 	public Ship(ShipType ship, int dir) {
 		super(ship.getCheatVal(), ship.getNoCheatVal());
 		this.hitPoints = ship.getHitPoints();
@@ -86,6 +91,7 @@ public class Ship extends BoardCell {
 		System.out.println(Battleship.msg_HIT);
         //decreased hit points by one
 		hitPoints--;
+        isHit = true;
         //check if no hit points
 		if (hitPoints == 0) {
 			System.out.println(Ship.this.cheatVal + "-ship " + Battleship.msg_SUNK);

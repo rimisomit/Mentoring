@@ -31,7 +31,12 @@ public class Board {
 	private int numHits = 0;
 	Random rand = new Random();
 
-	// Constructor. Create board with ships
+    /**
+     *
+     * @param dim
+     * @param configFile
+     * @throws BattleshipException
+     */
 	public Board(int dim, String configFile ) throws BattleshipException {
 		this.dimension = dim;
 		grid = new BoardCell[dim][dim];
@@ -172,10 +177,13 @@ public class Board {
 	public int getNumHits() {
         return numHits;
     }
-	
+
+    /**
+     *
+     * @return number of sunk ships
+     */
 	public int getShipsSunk() {
 		int numSunk = 0;
-		
 		// loop through the ships to determine how many are sunk
 		for (int i=0; i<ships.length; i++) {
 			if (ships[i].getSunk()) {
@@ -184,7 +192,11 @@ public class Board {
 		}
 		return numSunk;
 	}
-	// return ships count
+
+    /**
+     *
+     * @return total ship count
+     */
 	public int getNumShips() {
         return ships.length;
     }
@@ -201,7 +213,11 @@ public class Board {
 	public boolean checkWin() {
         return getNumShips() == getShipsSunk();
     }
-	
+
+    /**
+     * display board
+     * @param cheat
+     */
 	public void display(boolean cheat) {
 		// print column header
         System.out.print("   ");
@@ -223,6 +239,23 @@ public class Board {
 		}
 	}
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return piece string value
+     */
+    public String getPieceValue(int x, int y) {
+        BoardCell piece = getPiece(x, y);
+        return piece.getVal(false);
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return was fire successful
+     */
 	public boolean fire(int x, int y) {
 		// cannot fire on an invalid spot, or a cell that was already hit
 		// (i.e. contains a crater)
@@ -243,7 +276,11 @@ public class Board {
 		return true;
 	}
 
-    //Try to place one ship randomly
+    /**
+     *
+     * @param ship
+     * place a ship randomly
+     */
 	private void placeShipRandom(Ship ship) {
 		int row = 0, col = 0;
 		boolean placed = false;
@@ -279,7 +316,12 @@ public class Board {
 
     }
 
-    // Place verified ship
+    /**
+     * Place already verified ship on board
+     * @param ship
+     * @param row
+     * @param col
+     */
 	private void placeShip(Ship ship, int row, int col) {
 		// input: ship size, stating coords
 		for (int i=0; i<ship.getHitPoints(); i++) {
@@ -289,8 +331,15 @@ public class Board {
 			else place(row, col-i, ship);
 		}	
 	}
-    // Position verification
 
+    /**
+     * Ship position verification
+     * @param ship
+     * @param row
+     * @param col
+     * @param dir
+     * @return
+     */
 	private boolean isShipPositionValid(Ship ship, int row, int col, int dir) {
 		int rowInc = 0;
 		int colInc = 0;

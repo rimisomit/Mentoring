@@ -18,6 +18,11 @@ public class Crater extends BoardCell {
 	public boolean wasHit() {
         return true;
     }
+
+    /**
+     *
+     * @return
+     */
 	@Override
 	public boolean fireAt() {
 		System.err.println("This should never happens");

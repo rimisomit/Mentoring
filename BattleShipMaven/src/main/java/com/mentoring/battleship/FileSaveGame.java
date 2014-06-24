@@ -2,16 +2,12 @@ package com.mentoring.battleship;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.DirectoryEntry;
-import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -23,15 +19,23 @@ public class FileSaveGame {
      * File => Class => Object
      */
 
-    //private Board myBoard;
-    //private Board compBoard;
     private String templateName;
 
-
+    /**
+     *
+     * @param templName from classpath
+     */
     public FileSaveGame(String templName){
         this.templateName = templName;
     }
 
+    /**
+     * Save current progress to XLS
+     * @param myBoard
+     * @param compBoard
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public void saveBoardToFile(Board myBoard, Board compBoard) throws IOException, URISyntaxException {
         int dimension;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss").format(Calendar.getInstance().getTime());
