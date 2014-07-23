@@ -1,7 +1,21 @@
 1. Layout
 1.1 Objects can be near borders
 1.2 Distance between nearest objects >= one cell
-1.3 Ships size and count doesnt matter
+1.3 Ships size and count does matter
+
+Game sequence
+User: shoot at random not damaged cell
+if hit then shoot near cell (up,down,left, right)
+if sunk do not hit near cells (up,down,left, right). shoot random sell
+if not hit got to COMP
+
+COMP: shoot at random not damaged cell
+if hit then shoot near cell (up,down,left, right)
+if sunk do not hit near cells (up,down,left, right). shoot random sell
+if not hit got to USER
+
+
+
 
 2. Shooting sequence
 2.1 User side

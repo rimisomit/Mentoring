@@ -24,7 +24,12 @@ public abstract class BoardCell {
 	public abstract boolean isOccupied();
 	// was the cell already hit by a missile (i.e. it is a crater)?
 	public abstract boolean wasHit();
+    public abstract boolean wasSunk();
 	// does firing at this cell produce a hit?
 	public abstract boolean fireAt();
+    public abstract int getShipStarRow();
+    public abstract int getShipEndRow();
+    public abstract int getShipStarColumn();
+    public abstract int getShipEndColumn();
 }
 

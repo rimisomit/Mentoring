@@ -26,9 +26,19 @@ public class Water extends BoardCell {
     }
 
     @Override
+    public boolean wasSunk() {
+        return false;
+    }
+
+    @Override
 	public boolean fireAt() {
-		System.out.println(Battleship.msg_MISS);
+		System.out.println(Battleship.MSG_MISS);
 		return false;
 	}
+
+    public int getShipStarRow() { return -1; }
+    public int getShipEndRow() { return -1; }
+    public int getShipStarColumn() { return -1; }
+    public int getShipEndColumn() { return -1; }
 }
 

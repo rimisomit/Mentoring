@@ -1,5 +1,15 @@
-Done
-+JavaDoc
-*Git Branches
-+New turn-based logic
-+Target new dir structure
+1. Place 0 near sunk ship
+2. | vs ||
+2. OOP. Inherinase, abstraction, high cohesion, low coupling, assosiation, composition, UML, class diagrams, use case diagrams
+
+
+1. Few Car Class diagram {
+Inheritance - is a
+Composition - has a
+Aggregation
+Assosiation
+}
+
+Battkeship
+AI
+placement

@@ -46,8 +46,12 @@ public class Ship extends BoardCell {
 	// ship data
 	private int hitPoints;
 	private int dir;
+    private int startRow;
+    private int startColumn;
+    private int endRow;
+    private int endColumn;
 	private boolean sunk = false;
-    private boolean isHit = false;
+    //private boolean isHit = false;
 
     /**
      *
@@ -59,6 +63,7 @@ public class Ship extends BoardCell {
 		this.hitPoints = ship.getHitPoints();
 		this.dir = dir;
 	}
+
 	//Getters
 	public boolean getSunk() {
 		return sunk;
@@ -70,13 +75,55 @@ public class Ship extends BoardCell {
 	public int getHitPoints() {
         return hitPoints;
     }
+    public int getShipStarRow() { return startRow; }
+    public int getShipEndRow() { return endRow; }
+    public int getShipStarColumn() { return startColumn; }
+    public int getShipEndColumn() { return endColumn; }
+
 	// Setters
+    //TODO this.sunk vs sunk
+
+    /**
+     *
+     * @param val
+     */
 	public void setSunk(boolean val) {
-        sunk = val;
+        this.sunk = val;
     }
 	public void setDirection(int dir) {
         this.dir = dir;
     }
+    public void setShipCoords(int startRow, int startColumn) {
+        this.startRow = startRow;
+        this.startColumn = startColumn;
+        if (dir == 2) {
+           this.endColumn = startColumn + hitPoints - 1;
+           this.endRow = startRow;
+        }
+        if (dir == 3) {
+            this.endColumn = startColumn - hitPoints + 1;
+            this.endRow = startRow;
+        }
+        if (dir == 0) {
+            this.endRow = startRow - hitPoints + 1;
+            this.endColumn = startColumn;
+        }
+        if (dir == 1) {
+            this.endRow = startRow + hitPoints - 1;
+            this.endColumn = startColumn;
+        }
+        if (this.endColumn < startColumn) {
+            int temp = endColumn;
+            this.endColumn = startColumn;
+            this.startColumn = temp;
+        }
+        if (this.endRow < startRow) {
+            int temp = endRow;
+            this.endRow = startRow;
+            this.startRow = temp;
+        }
+        }
+
 	@Override
 	public boolean isOccupied() {
         return true;
@@ -85,16 +132,20 @@ public class Ship extends BoardCell {
 	public boolean wasHit() {
         return false;
     }
+    @Override
+    public boolean wasSunk() {
+        return (hitPoints == 0);
+    }
 	@Override
 	public boolean fireAt() {
 		// user hit a ship
-		System.out.println(Battleship.msg_HIT);
+		System.out.println(Battleship.MSG_HIT);
         //decreased hit points by one
 		hitPoints--;
-        isHit = true;
+        //isHit = true;
         //check if no hit points
 		if (hitPoints == 0) {
-			System.out.println(Ship.this.cheatVal + "-ship " + Battleship.msg_SUNK);
+			System.out.println(Ship.this.cheatVal + "-ship " + Battleship.MSG_SUNK);
 			sunk = true;
 		}
 		return true;

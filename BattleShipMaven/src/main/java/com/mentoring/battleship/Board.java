@@ -21,6 +21,7 @@ public class Board {
 	private Ship[] ships;
 	// the grid of game pieces
 	private BoardCell grid[][];
+    private int suggestedArray[][];
 	private int dimension;
 	// game limits
 	public final static int MIN_BOARD_SIZE = 9;
@@ -160,7 +161,11 @@ public class Board {
 			}*/
 		}
 	}
-	
+
+    /**
+     *
+     * @return dimension size
+     */
 	public int getDim() {
 		return dimension;
 	}
@@ -268,18 +273,71 @@ public class Board {
 			// get the ship's icon to store with the crater
 			String shipVal = getPiece(x,y).getVal(true);
 			numHits++;
-			// replace with ship crater that remembers the ship it hit
-			place(x,y, new Crater(shipVal, SHIP_CRATER));
+            if (getPiece(x,y).wasSunk()) {
+                int startRow = getPiece(x,y).getShipStarRow();
+                int startColumn = getPiece(x,y).getShipStarColumn();
+                int endRow = getPiece(x,y).getShipEndRow();
+                int endColumn = getPiece(x,y).getShipEndColumn();
+                //System.out.println(getPiece(x,y).get);
+                //System.out.println(getPiece(x,y).getShipStarRow() + ":" + getPiece(x,y).getShipStarColumn());
+                //System.out.println(getPiece(x,y).getShipEndRow() + ":" + getPiece(x,y).getShipEndColumn());
+                for (int row = startRow - 1; row <= endRow + 1; row++)
+                    for (int col = startColumn - 1; col <= endColumn + 1; col++) {
+                        if (!getPiece(row,col).wasHit()) {
+                            place(row, col, waterCrater);
+                        }
+                    }
+            }
+            // replace with ship crater that remembers the ship it hit
+            place(x,y, new Crater(shipVal, SHIP_CRATER));
+            if (suggestedArray == null) {
+                setSuggestedArray(x, y);
+            }
 		} else {
 			place(x,y, waterCrater);
+            suggestedArray = null;
 		}
 		return true;
 	}
 
+    public void setSuggestedArray(int x, int y) {
+        suggestedArray = new int[4][2];
+        suggestedArray[0][0] = x + 1;
+        suggestedArray[0][1] = y;
+        //
+        suggestedArray[1][0] = x;
+        suggestedArray[1][1] = y + 1;
+        //
+        suggestedArray[2][0] = x - 1;
+        suggestedArray[2][1] = y;
+        //
+        suggestedArray[3][0] = x;
+        suggestedArray[3][1] = y - 1;
+
+        System.out.println(suggestedArray[0][0] + ":" +
+        suggestedArray[0][1] + "   " +
+        suggestedArray[1][0] + ":" +
+        suggestedArray[1][1] + "   " +
+        suggestedArray[2][0] + ":" +
+        suggestedArray[2][1] + "   " +
+        suggestedArray[3][0] + ":" +
+        suggestedArray[3][1]);
+
+    }
+
+    //public int[][] poss
+
+    public int[][] getSuggestedArray() {
+        return suggestedArray;
+    }
+
+    public void placeCraters(int x, int y) {
+
+    }
+
     /**
-     *
+     * Generate random cords for a ship and place it
      * @param ship
-     * place a ship randomly
      */
 	private void placeShipRandom(Ship ship) {
 		int row = 0, col = 0;
@@ -290,9 +348,11 @@ public class Board {
         int repeatLimit = 0;
 		while (!placed) {
 			// starting coord should not be near borders
-			row = rand.nextInt(getDim() - 2) + 1;
-			col = rand.nextInt(getDim() - 2) + 1;
-            //System.out.println(row + "&" + col + " " + ship.cheatVal + " " + ship.getDirection());
+			row = rand.nextInt(getDim() - 2) + 0;
+			col = rand.nextInt(getDim() - 2) + 0;
+            if (row == 0 || col == 0) {
+                //System.out.println(row + " & " + col + " " + ship.cheatVal + " " + ship.getDirection());
+            }
             // try each direction[N|S|E|W] for this coors
 			for (int i=0; i<4; i++) {
                 // check if ship can be placed
@@ -313,23 +373,23 @@ public class Board {
         catch(BattleshipException e) {
             System.err.println(e.getMessage());
     }
-
     }
 
     /**
-     * Place already verified ship on board
+     * Place already verified ship on board by coords
      * @param ship
      * @param row
      * @param col
      */
 	private void placeShip(Ship ship, int row, int col) {
-		// input: ship size, stating coords
+		// input: ship, stating coords
 		for (int i=0; i<ship.getHitPoints(); i++) {
 			if (ship.getDirection() == Ship.NORTH) place(row-i, col, ship);
 			else if (ship.getDirection() == Ship.SOUTH) place(row+i, col, ship);
 			else if (ship.getDirection() == Ship.EAST) place(row, col+i, ship);
 			else place(row, col-i, ship);
-		}	
+		}
+        ship.setShipCoords(row, col);
 	}
 
     /**
@@ -344,29 +404,90 @@ public class Board {
 		int rowInc = 0;
 		int colInc = 0;
 		// stepping factors based on direction
+        //
 		if (dir == Ship.NORTH) rowInc = -1;
 		else if (dir == Ship.SOUTH) rowInc = 1;
 		else if (dir == Ship.EAST) colInc = 1;
+        //
 		else if (dir == Ship.WEST) colInc = -1;
 		// check borders. start row + (direction * size-1)
 		int rowBound = row + (rowInc * (ship.getHitPoints() - 1)); //=row if horizontal
         int colBound = col + (colInc * (ship.getHitPoints() - 1)); //=col if vertical
+        //System.out.println(row + " : " + col);
+        //System.out.println("---------------------");
+        //System.out.println(rowBound + " : " + colBound);
         if (rowBound < 1 || rowBound > getDim() - 2)
 			return false;
 		else if (colBound < 1 || colBound > getDim() - 2)
 			return false;
 		// put ship correctly
         int count = 0;
-		while (count < ship.getHitPoints() && !getPiece(row, col).isOccupied()
-                && !getPiece((row-1), col).isOccupied() && !getPiece(row, (col-1)).isOccupied()
-                && !getPiece((row+1), col).isOccupied() && !getPiece(row, (col+1)).isOccupied()
-                && !getPiece((row+1), (col-1)).isOccupied() && !getPiece((row-1), (col+1)).isOccupied()
-                && !getPiece((row+1), (col+1)).isOccupied() && !getPiece((row-1), (col-1)).isOccupied()) {
-			row += rowInc;
-			col += colInc;
-			count++;
-            //System.out.println(row + " " + rowInc + " | " + col + " " + colInc);
-        }
+        //FIXME
+            if (row==0 && col == 0) {
+                while (count < ship.getHitPoints()
+                        && !getPiece(row, col).isOccupied()
+                        && !getPiece((row + 1), col).isOccupied()
+                        && !getPiece(row, (col + 1)).isOccupied()
+                        && !getPiece((row + 1), (col + 1)).isOccupied()
+                        ) {
+
+                    row += rowInc;
+                    col += colInc;
+                    count++;
+                    //System.out.println(row + " " + rowInc + " | " + col + " " + colInc);
+                }
+            }
+            if (!(col == 0) && row==0) {
+                //System.out.println(row + " " + col);
+                while (count < ship.getHitPoints()
+                        && !getPiece(row, col).isOccupied()
+                        && !getPiece(row, (col - 1)).isOccupied()
+                        && !getPiece((row + 1), col).isOccupied()
+                        && !getPiece(row, (col + 1)).isOccupied()
+                        && !getPiece((row + 1), (col - 1)).isOccupied()
+                        && !getPiece((row + 1), (col + 1)).isOccupied()) {
+
+                    row += rowInc;
+                    col += colInc;
+                    count++;
+                    //System.out.println(row + " " + rowInc + " | " + col + " " + colInc);
+                }
+            }
+            if (!(row==0) && col == 0) {
+                //System.out.println(row + " " + col);
+                while (count < ship.getHitPoints()
+                        && !getPiece(row, col).isOccupied()
+                        && !getPiece((row - 1), col).isOccupied()
+                        && !getPiece((row + 1), col).isOccupied()
+                        && !getPiece(row, (col + 1)).isOccupied()
+                        && !getPiece((row - 1), (col + 1)).isOccupied()
+                        && !getPiece((row + 1), (col + 1)).isOccupied()
+                        ) {
+
+                    row += rowInc;
+                    col += colInc;
+                    count++;
+                    //System.out.println(row + " " + rowInc + " | " + col + " " + colInc);
+                }
+            }
+            if (!(row == 0) && !(col == 0)) {
+                while (count < ship.getHitPoints()
+                        && !getPiece(row, col).isOccupied()
+                        && !getPiece((row - 1), col).isOccupied()
+                        && !getPiece(row, (col - 1)).isOccupied()
+                        && !getPiece((row + 1), col).isOccupied()
+                        && !getPiece(row, (col + 1)).isOccupied()
+                        && !getPiece((row + 1), (col - 1)).isOccupied()
+                        && !getPiece((row - 1), (col + 1)).isOccupied()
+                        && !getPiece((row + 1), (col + 1)).isOccupied()
+                        && !getPiece((row - 1), (col - 1)).isOccupied()) {
+
+                    row += rowInc;
+                    col += colInc;
+                    count++;
+                    //System.out.println(row + " " + rowInc + " | " + col + " " + colInc);
+                }
+            }
 		// if all cells are unoccupied we can place the ship here
         //System.out.println(count == ship.getHitPoints());
         return (count == ship.getHitPoints());

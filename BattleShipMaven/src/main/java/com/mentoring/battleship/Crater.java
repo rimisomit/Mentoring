@@ -10,7 +10,13 @@ public class Crater extends BoardCell {
 	public Crater(String cheatVal, String noCheatVal) {
 		super(cheatVal, noCheatVal);
 	}
-	@Override
+
+    public int getShipStarRow() { return -1; }
+    public int getShipEndRow() { return -1; }
+    public int getShipStarColumn() { return -1; }
+    public int getShipEndColumn() { return -1; }
+
+    @Override
 	public boolean isOccupied() {
         return true;
     }
@@ -18,7 +24,10 @@ public class Crater extends BoardCell {
 	public boolean wasHit() {
         return true;
     }
-
+    @Override
+    public boolean wasSunk() {
+        return false;
+    }
     /**
      *
      * @return

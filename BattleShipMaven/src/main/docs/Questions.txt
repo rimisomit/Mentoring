@@ -1,5 +1,4 @@
 <Q>
-1. JavaDoc
-2. Code convention. CheckStyle
-5. Null pointer during commit
+1. Destructor?
+
 </Q>
