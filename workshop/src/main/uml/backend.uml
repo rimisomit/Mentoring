@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.mentoring.workshop.backend</OriginalElement>
+  <nodes>
+    <node x="226.75" y="204.5">com.mentoring.workshop.backend.CarLocation</node>
+    <node x="325.5" y="0.0">com.mentoring.workshop.backend.CarReceiveService</node>
+    <node x="288.0" y="421.0">com.mentoring.workshop.backend.Garage</node>
+    <node x="0.0" y="410.0">com.mentoring.workshop.backend.Parking</node>
+    <node x="363.75" y="120.0">com.mentoring.workshop.backend.Repairment</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.mentoring.workshop.backend.Repairment" target="com.mentoring.workshop.backend.CarReceiveService">
+      <point x="0.0" y="-120.0" />
+      <point x="563.75" y="95.0" />
+      <point x="474.0" y="95.0" />
+      <point x="49.5" y="35.0" />
+    </edge>
+    <edge source="com.mentoring.workshop.backend.Parking" target="com.mentoring.workshop.backend.CarLocation">
+      <point x="0.0" y="-78.0" />
+      <point x="134.0" y="385.0" />
+      <point x="256.0" y="385.0" />
+      <point x="-29.25" y="35.5" />
+    </edge>
+    <edge source="com.mentoring.workshop.backend.Garage" target="com.mentoring.workshop.backend.CarLocation">
+      <point x="0.0" y="-67.0" />
+      <point x="436.5" y="385.0" />
+      <point x="314.5" y="385.0" />
+      <point x="29.25" y="35.5" />
+    </edge>
+    <edge source="com.mentoring.workshop.backend.CarLocation" target="com.mentoring.workshop.backend.CarReceiveService">
+      <point x="2.8421709430404007E-14" y="-35.5" />
+      <point x="285.25" y="95.0" />
+      <point x="375.0" y="95.0" />
+      <point x="-49.5" y="35.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="382.0" y="283.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.mentoring.workshop.frontend</OriginalElement>
+  <nodes>
+    <node x="0.0" y="120.0">com.mentoring.workshop.frontend.Recetion</node>
+    <node x="0.0" y="405.0">com.mentoring.workshop.frontend.Client</node>
+    <node x="39.5" y="0.0">com.mentoring.workshop.frontend.ClientOrderService</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.mentoring.workshop.frontend.Recetion" target="com.mentoring.workshop.frontend.ClientOrderService">
+      <point x="0.0" y="-120.0" />
+      <point x="0.0" y="35.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="152.5" y="249.0" />
+  <SelectedNodes>
+    <node>com.mentoring.workshop.frontend.ClientOrderService</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
