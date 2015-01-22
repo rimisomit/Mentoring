@@ -15,7 +15,7 @@ public class LinkList<E> {
 
     public void add(E element) {
         Link<E> lastLink = last;
-        Link<E> newLink = new Link<>(element, null);
+        Link<E> newLink = new Link<>(element);
         last = newLink;
         if (lastLink == null) {
             //empty list
@@ -63,21 +63,27 @@ public class LinkList<E> {
         if (o == null) {
             for (Link<E> x = first; x != null; x = x.next) {
                 if (x.item == null) {
-                    E element = x.item;
+
                     Link<E> next = x.next;
 
 
-                    x.item = null;
                     size--;
                     return true;
                 }
             }
         } else {
+            Link<E> prev = null;
             for (Link<E> x = first; x != null; x = x.next) {
                 if (o.equals(x.item)) {
-
+                    if (x != first) {
+                        prev.next = x.next;
+                    } else {
+                        first = x.next;
+                    }
+                    size--;
                     return true;
                 }
+                prev = x;
             }
         }
         return false;

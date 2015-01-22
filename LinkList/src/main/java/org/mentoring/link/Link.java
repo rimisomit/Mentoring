@@ -12,9 +12,9 @@ public class Link<E> {
     //public Link<E> prev;
     E item;
 
-    public Link(E element, Link<E> next) {
+    public Link(E element) {
         this.item = element;
-        this.next = next;
+        this.next = null;
     }
 
 
