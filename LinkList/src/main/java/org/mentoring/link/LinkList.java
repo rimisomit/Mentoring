@@ -1,11 +1,13 @@
 package org.mentoring.link;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Created by user on 1/22/15.
  */
-public class LinkList<E> {
+public class LinkList<E> implements Iterable{
 
 
     private Link<E> first;  //first node
@@ -28,7 +30,12 @@ public class LinkList<E> {
     }
 
     public void addAll(Collection<? extends E> collection) {
+        Object[] a = collection.toArray();
 
+        for (Object o : a) {
+            E e = (E) o;
+            add(e);
+        }
     }
 
     public int size() {
@@ -97,5 +104,60 @@ public class LinkList<E> {
         if (!isIndexExist(index))
             throw new IndexOutOfBoundsException();
     }
+
+    public LinkIterator<E> linkIterator() {
+        return new LinkIterator();
+    }
+
+    @Override
+    public Iterator iterator() {
+        return linkIterator();
+    }
+
+    private static class Link<E> {
+
+        public Link<E> next;
+        //public Link<E> prev;
+        E item;
+
+        public Link(E element) {
+            this.item = element;
+            this.next = null;
+        }
+    }
+
+    private class LinkIterator<E> implements Iterator<E> {
+
+        private int nextIndex;
+        private Link<E> current;
+
+
+        public LinkIterator() {
+            this.current = (Link<E>) first;
+
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nextIndex < size-1;
+            //return current != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+            current = current.next;
+            this.nextIndex++;
+
+            return current.item;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
 
 }

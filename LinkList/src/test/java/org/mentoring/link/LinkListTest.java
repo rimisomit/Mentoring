@@ -4,12 +4,18 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Objects;
+
 /**
  * Created by user on 1/22/15.
  */
 public class LinkListTest {
 
     LinkList<Integer> linkList;
+    LinkedList<Integer> linkedList;
 
     @Before
     public void setUp() {
@@ -27,19 +33,29 @@ public class LinkListTest {
         linkList.add(17);
     }
 
+    private void createCollection() {
+        linkedList = new LinkedList<>();
+        linkedList.add(20);
+        linkedList.add(21);
+        linkedList.add(22);
+        linkedList.add(23);
+        linkedList.add(24);
+        linkedList.add(25);
+    }
+
     @Test
-    public void checkInitialSizeTest(){
+    public void checkInitialSizeTest() {
         Assert.assertEquals(0, linkList.size());
     }
 
     @Test
-    public void checkSizeAfterAddTest(){
+    public void checkSizeAfterAddTest() {
         addIntegers();
         Assert.assertEquals(8, linkList.size());
     }
 
     @Test
-    public void getTest(){
+    public void getTest() {
         addIntegers();
         Assert.assertEquals(10, linkList.get(0).intValue());
         Assert.assertEquals(11, linkList.get(1).intValue());
@@ -47,19 +63,19 @@ public class LinkListTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void boundsTest(){
+    public void boundsTest() {
         addIntegers();
         Assert.assertEquals(100, linkList.get(100).intValue());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void negativeIndexTest(){
+    public void negativeIndexTest() {
         addIntegers();
         Assert.assertEquals(-1, linkList.get(100).intValue());
     }
 
     @Test
-    public void containsTest(){
+    public void containsTest() {
         addIntegers();
         Assert.assertTrue(linkList.contains(10));
         Assert.assertTrue(linkList.contains(12));
@@ -67,36 +83,67 @@ public class LinkListTest {
     }
 
     @Test
-    public void containsNullTest(){
+    public void containsNullTest() {
         addIntegers();
         Assert.assertFalse(linkList.contains(null));
     }
 
     @Test
-    public void removeTest(){
+    public void removeTest() {
         addIntegers();
         Assert.assertTrue(linkList.remove(12));
         Assert.assertFalse(linkList.contains(12));
     }
 
     @Test
-    public void removeLastTest(){
+    public void removeLastTest() {
         addIntegers();
         Assert.assertTrue(linkList.remove(17));
         Assert.assertFalse(linkList.contains(17));
     }
 
     @Test
-    public void removeFirstTest(){
+    public void removeFirstTest() {
         addIntegers();
         Assert.assertTrue(linkList.remove(10));
         Assert.assertFalse(linkList.contains(10));
     }
 
     @Test
-    public void removeNotExistentTest(){
+    public void removeNotExistentTest() {
         addIntegers();
         Assert.assertFalse(linkList.remove(9));
     }
 
+    @Test
+    public void addCollectionToEmptyListTest() {
+        createCollection();
+        linkList.addAll(linkedList);
+        Assert.assertEquals(6, linkList.size());
+    }
+
+    @Test
+    public void addCollectionTest() {
+        createCollection();
+        linkList.addAll(linkedList);
+        addIntegers();
+        Assert.assertEquals(14, linkList.size());
+    }
+
+    @Test
+    public void iteTest() {
+        createCollection();
+        linkList.addAll(linkedList);
+        addIntegers();
+
+/*
+        for (Iterator<Integer> it2 = linkList.linkIterator(); it2.hasNext();) {
+            System.out.println(it2.next());
+        }
+*/
+        for (Object o : linkList) {
+            System.out.println(o);
+        }
+
+    }
 }
