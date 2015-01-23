@@ -7,13 +7,11 @@ import java.util.NoSuchElementException;
 /**
  * Created by user on 1/22/15.
  */
-public class LinkList<E> implements Iterable{
-
+public class LinkList<E> implements Iterable {
 
     private Link<E> first;  //first node
     private Link<E> last;   //Last node
     private int size = 0;
-
 
     public void add(E element) {
         Link<E> lastLink = last;
@@ -67,19 +65,20 @@ public class LinkList<E> implements Iterable{
     }
 
     public boolean remove(Object o) {
+        Link<E> prev = null;
         if (o == null) {
             for (Link<E> x = first; x != null; x = x.next) {
                 if (x.item == null) {
-
-                    Link<E> next = x.next;
-
-
+                    if (x != first) {
+                        prev.next = x.next;
+                    } else {
+                        first = x.next;
+                    }
                     size--;
                     return true;
                 }
             }
         } else {
-            Link<E> prev = null;
             for (Link<E> x = first; x != null; x = x.next) {
                 if (o.equals(x.item)) {
                     if (x != first) {
@@ -105,7 +104,7 @@ public class LinkList<E> implements Iterable{
             throw new IndexOutOfBoundsException();
     }
 
-    public LinkIterator<E> linkIterator() {
+    public LinkIterator linkIterator() {
         return new LinkIterator();
     }
 
@@ -126,20 +125,20 @@ public class LinkList<E> implements Iterable{
         }
     }
 
-    private class LinkIterator<E> implements Iterator<E> {
+    private class LinkIterator implements Iterator<E> {
 
         private int nextIndex;
         private Link<E> current;
 
 
         public LinkIterator() {
-            this.current = (Link<E>) first;
+            this.current = first;
 
         }
 
         @Override
         public boolean hasNext() {
-            return nextIndex < size-1;
+            return nextIndex < size - 1;
             //return current != null;
         }
 

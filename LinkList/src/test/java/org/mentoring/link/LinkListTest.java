@@ -4,10 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Objects;
 
 /**
  * Created by user on 1/22/15.
@@ -38,7 +35,7 @@ public class LinkListTest {
         linkedList.add(20);
         linkedList.add(21);
         linkedList.add(22);
-        linkedList.add(23);
+        linkedList.add(null);
         linkedList.add(24);
         linkedList.add(25);
     }
@@ -83,9 +80,16 @@ public class LinkListTest {
     }
 
     @Test
-    public void containsNullTest() {
+    public void notContainsNullTest() {
         addIntegers();
         Assert.assertFalse(linkList.contains(null));
+    }
+
+    @Test
+    public void containsNullTest() {
+        addIntegers();
+        linkList.add(null);
+        Assert.assertTrue(linkList.contains(null));
     }
 
     @Test
@@ -135,7 +139,7 @@ public class LinkListTest {
         createCollection();
         linkList.addAll(linkedList);
         addIntegers();
-
+        linkList.add(null);
 /*
         for (Iterator<Integer> it2 = linkList.linkIterator(); it2.hasNext();) {
             System.out.println(it2.next());
