@@ -11,27 +11,32 @@ public class LinkList<E> implements Iterable {
 
     private Link<E> first;  //first node
     private Link<E> last;   //Last node
-    private int size = 0;
+    private int size = 0;   //initial size
 
+    /**
+     * add element to the end of the list
+     * @param element
+     */
     public void add(E element) {
         Link<E> lastLink = last;
         Link<E> newLink = new Link<>(element);
         last = newLink;
         if (lastLink == null) {
-            //empty list
+            //if empty list
             first = newLink;
         } else {
-            //non empty list
+            //if non empty list
             lastLink.next = newLink;
         }
         size++;
     }
 
+    /**
+     * add param collection to the end of the list
+     * @param collection
+     */
     public void addAll(Collection<? extends E> collection) {
-        Object[] a = collection.toArray();
-
-        for (Object o : a) {
-            E e = (E) o;
+        for (E e : collection) {
             add(e);
         }
     }
@@ -49,7 +54,7 @@ public class LinkList<E> implements Iterable {
         return x.item;
     }
 
-    public boolean contains(Object o) {
+    public boolean contains(E o) {
         if (o == null) {
             for (Link<E> x = first; x != null; x = x.next) {
                 if (x.item == null)
@@ -64,12 +69,13 @@ public class LinkList<E> implements Iterable {
         return false;
     }
 
-    public boolean remove(Object o) {
+    public boolean remove(E o) {
         Link<E> prev = null;
         if (o == null) {
             for (Link<E> x = first; x != null; x = x.next) {
                 if (x.item == null) {
                     if (x != first) {
+                        //fixme prev = null ?
                         prev.next = x.next;
                     } else {
                         first = x.next;
@@ -77,6 +83,7 @@ public class LinkList<E> implements Iterable {
                     size--;
                     return true;
                 }
+                prev = x;
             }
         } else {
             for (Link<E> x = first; x != null; x = x.next) {
@@ -109,12 +116,14 @@ public class LinkList<E> implements Iterable {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<E> iterator() {
         return linkIterator();
     }
 
     private static class Link<E> {
-
+        /**
+         * Container class
+         */
         public Link<E> next;
         //public Link<E> prev;
         E item;
@@ -126,11 +135,15 @@ public class LinkList<E> implements Iterable {
     }
 
     private class LinkIterator implements Iterator<E> {
-
+        /**
+         * Iterator
+         */
         private int nextIndex;
         private Link<E> current;
 
-
+        /**
+         * Constructor
+         */
         public LinkIterator() {
             this.current = first;
 
@@ -148,7 +161,6 @@ public class LinkList<E> implements Iterable {
                 throw new NoSuchElementException();
             current = current.next;
             this.nextIndex++;
-
             return current.item;
         }
 

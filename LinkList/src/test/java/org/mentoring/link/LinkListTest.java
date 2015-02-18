@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -19,7 +20,11 @@ public class LinkListTest {
         linkList = new LinkList<Integer>();
     }
 
+    /**
+     * Creates
+     */
     private void addIntegers() {
+        //TODO refactor
         linkList.add(10);
         linkList.add(11);
         linkList.add(12);
@@ -32,10 +37,11 @@ public class LinkListTest {
 
     private void createCollection() {
         linkedList = new LinkedList<>();
+        //TODO refactor
+        linkedList.add(null);
         linkedList.add(20);
         linkedList.add(21);
         linkedList.add(22);
-        linkedList.add(null);
         linkedList.add(24);
         linkedList.add(25);
     }
@@ -93,7 +99,7 @@ public class LinkListTest {
     }
 
     @Test
-    public void removeTest() {
+    public void removeNotNullTest() {
         addIntegers();
         Assert.assertTrue(linkList.remove(12));
         Assert.assertFalse(linkList.contains(12));
@@ -148,6 +154,24 @@ public class LinkListTest {
         for (Object o : linkList) {
             System.out.println(o);
         }
+    }
 
+    @Test
+    public void removeNull() throws Exception {
+        LinkList<Integer> i = new LinkList<>();
+        i.add(1);
+        i.add(2);
+        i.add(null);
+        i.add(3);
+        for (Object o : i) {
+            System.out.println(o);
+        }
+        System.out.println(i.size());
+        i.remove(2);
+        i.remove(null);
+        for (Object o : i) {
+            System.out.println(o);
+        }
+        System.out.println(i.size());
     }
 }
